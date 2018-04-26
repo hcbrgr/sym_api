@@ -22,14 +22,13 @@ class UserRepository extends ServiceEntityRepository
     /**
      * @return User[] Returns an array of User objects
      */
-    public function findByNameAndPass(string $name, string $pass)
+    public function findByNameAndPass(string $mail, string $pass)
     {
         return $this->createQueryBuilder('u')
-            ->andWhere('u.name= :name')
+            ->andWhere('u.email= :mail')
             ->andWhere('u.password= :pass')
-            ->setParameter('name', $name)
+            ->setParameter('mail', $mail)
             ->setParameter('pass', $pass)
-            ->setMaxResults(10)
             ->getQuery()
             ->getResult()
         ;

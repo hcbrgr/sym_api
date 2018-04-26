@@ -14,7 +14,13 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 class UserController extends Controller
 {
     /**
-     * @Route("/user", name="user", methods="GET")
+     * Key for JWT
+     * @var string
+     */
+    const KEY = 'key';
+
+    /**
+     * @Route("/api/user", name="user", methods="GET")
      */
     public function index(): Response
     {
@@ -24,26 +30,48 @@ class UserController extends Controller
     }
 
     /**
-     * @Route("/login", name="user_login", methods="POST")
+     * @Route("/api/login", name="user_login", methods="POST")
      */
     public function login(Request $request, UserRepository $userRepository): Response
     {
         $log = json_decode($request->getContent());
-        $password= hash('sha512', $log->password);
-        $result = $userRepository->findByNameAndPass($log->name, $password);
+        $password= hash('sha512', $log->Password);
+        $result = $userRepository->findByNameAndPass($log->Email, $password);
         if (!$result) {
 
-            return $this->json(['error' => 'Identifiant ou mot de passe incorrect'], 404);
+            return $this->json(['error' => 'Identifiant ou mot de passe incorrect'], 400);
         }
-        $key = 'key';
         $token = array(
             "iat" => time(),
             "nbf" => time()+20000,
-            "user" => $result
+            "user" => reset($result)->getId()
         );
         //A revoir
-        $jwt = JWT::encode($token, $key);
+        $jwt = JWT::encode($token, self::KEY);
+        $test = JWT::decode($jwt, self::KEY, ['HS256']);
 
         return $this->json(['token' => $jwt], 200);
+    }
+
+    /**
+     * @Route("/api/refreshToken", name="refresh_token", methods="POST")
+     */
+    public function refreshToken(Request $request)
+    {
+        $content = json_decode($request->getContent());
+        if (!isset($content->token) || empty($content->token)) {
+
+            return $this->json(['error' => 'Aucun token n\'a été envoyé.'], 422);
+        }
+        $jwt = JWT::decode($content->token, self::KEY, ['HS256']);
+        $token = array(
+            "iat" => time(),
+            "nbf" => time()+20000,
+            "user" => $jwt->user
+        );
+        //A revoir
+        $newJwt = JWT::encode($token, self::KEY);
+
+        return $this->json(['token' => $newJwt], 200);
     }
 }
