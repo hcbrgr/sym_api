@@ -17,7 +17,7 @@ class Location
     private $id;
 
     /**
-     * @ORM\Column(type="binary")
+     * @ORM\Column(type="integer")
      */
     private $beacon;
 
@@ -36,7 +36,7 @@ class Location
         return $this->id;
     }
 
-    public function getBeacon(): ?binary
+    public function getBeacon(): ?int
     {
         return $this->beacon;
     }
