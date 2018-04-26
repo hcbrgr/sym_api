@@ -17,14 +17,9 @@ class Location
     private $id;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="binary")
      */
-    private $minor;
-
-    /**
-     * @ORM\Column(type="integer")
-     */
-    private $major;
+    private $beacon;
 
     /**
      * @ORM\Column(type="string", length=40)
@@ -41,26 +36,14 @@ class Location
         return $this->id;
     }
 
-    public function getMinor(): ?int
+    public function getBeacon(): ?binary
     {
-        return $this->minor;
+        return $this->beacon;
     }
 
-    public function setMinor(int $minor): self
+    public function setBeacon($beacon): self
     {
-        $this->minor = $minor;
-
-        return $this;
-    }
-
-    public function getMajor(): ?int
-    {
-        return $this->major;
-    }
-
-    public function setMajor(int $major): self
-    {
-        $this->major = $major;
+        $this->beacon = $beacon;
 
         return $this;
     }
