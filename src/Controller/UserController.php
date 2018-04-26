@@ -34,44 +34,48 @@ class UserController extends Controller
      */
     public function login(Request $request, UserRepository $userRepository): Response
     {
-        $log = json_decode($request->getContent());
-        $password= hash('sha512', $log->Password);
-        $result = $userRepository->findByNameAndPass($log->Email, $password);
+        $content = json_decode($request->getContent());
+        if (!isset($content->Password) || empty($content->Password) || !isset($content->Email) || empty($content->Email)) {
+
+            return $this->json(['error' => 'Champs requis'], 422);
+        }
+        $password= hash('sha512', $content->Password);
+        $result = $userRepository->findByNameAndPass($content->Email, $password);
         if (!$result) {
 
             return $this->json(['error' => 'Identifiant ou mot de passe incorrect'], 400);
         }
-        $token = array(
-            "iat" => time(),
-            "nbf" => time()+20000,
-            "user" => reset($result)->getId()
-        );
+        $token = base64_encode(serialize([
+            $result->getId() => time()+20000
+        ]));
         //A revoir
-        $jwt = JWT::encode($token, self::KEY);
-        $test = JWT::decode($jwt, self::KEY, ['HS256']);
+        //$jwt = JWT::encode($test, self::KEY);
+        $result->setToken($token);
+        $this->getDoctrine()->getManager()->flush();
 
-        return $this->json(['token' => $jwt], 200);
+        return $this->json(['token' => $token], 200);
     }
 
     /**
      * @Route("/api/refreshToken", name="refresh_token", methods="POST")
      */
-    public function refreshToken(Request $request)
+    public function refreshToken(Request $request, UserRepository $userRepository)
     {
         $content = json_decode($request->getContent());
         if (!isset($content->token) || empty($content->token)) {
 
             return $this->json(['error' => 'Aucun token n\'a été envoyé.'], 422);
         }
-        $jwt = JWT::decode($content->token, self::KEY, ['HS256']);
-        $token = array(
-            "iat" => time(),
-            "nbf" => time()+20000,
-            "user" => $jwt->user
-        );
-        //A revoir
-        $newJwt = JWT::encode($token, self::KEY);
+        $test = unserialize(base64_decode($content->token));
+        $token = base64_encode(serialize([
+            key($test) => time()+20000
+        ]));
+        $user = $userRepository->find(key($test));
+        $user->setToken($token);
+        $this->getDoctrine()->getManager()->flush();
+        //$user = $userRepository->find($jwt->user);
+        //$user->setToken($newJwt);
 
-        return $this->json(['token' => $newJwt], 200);
+        return $this->json(['token' => $token ], 200);
     }
 }

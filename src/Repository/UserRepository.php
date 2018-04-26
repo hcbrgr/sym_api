@@ -30,7 +30,7 @@ class UserRepository extends ServiceEntityRepository
             ->setParameter('mail', $mail)
             ->setParameter('pass', $pass)
             ->getQuery()
-            ->getResult()
+            ->getOneOrNullResult()
         ;
     }
 
