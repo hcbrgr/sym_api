@@ -75,15 +75,6 @@ class ApiController extends Controller
     }
 
     /**
-     * @Route("/api/user", name="user", methods="GET")
-     */
-    public function index(): Response
-    {
-        $users = $this->getDoctrine()->getRepository(User::class)->findAll();
-        return $this->json(['user' => $users], 200);
-    }
-
-    /**
      * @Route("/api/login", name="user_login", methods="POST")
      */
     public function login(Request $request, UserRepository $userRepository): Response
