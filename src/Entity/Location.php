@@ -19,7 +19,12 @@ class Location
     /**
      * @ORM\Column(type="integer")
      */
-    private $beacon;
+    private $minor;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $major;
 
     /**
      * @ORM\Column(type="string", length=40)
@@ -36,14 +41,26 @@ class Location
         return $this->id;
     }
 
-    public function getBeacon(): ?int
+    public function getMinor(): ?int
     {
-        return $this->beacon;
+        return $this->minor;
     }
 
-    public function setBeacon($beacon): self
+    public function setMinor($minor): self
     {
-        $this->beacon = $beacon;
+        $this->minor= $minor;
+
+        return $this;
+    }
+
+    public function getMajor(): ?int
+    {
+        return $this->major;
+    }
+
+    public function setMajor($major): self
+    {
+        $this->major= $major;
 
         return $this;
     }

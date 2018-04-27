@@ -5,7 +5,6 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Repository\UserRepository;
 use Symfony\Component\Routing\Annotation\Route;
-use Firebase\JWT\JWT;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -13,11 +12,6 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class UserController extends Controller
 {
-    /**
-     * Key for JWT
-     * @var string
-     */
-    const KEY = 'key';
 
     /**
      * @Route("/api/user", name="user", methods="GET")
@@ -25,7 +19,6 @@ class UserController extends Controller
     public function index(): Response
     {
         $users = $this->getDoctrine()->getRepository(User::class)->findAll();
-
         return $this->json(['user' => $users], 200);
     }
 
@@ -48,8 +41,6 @@ class UserController extends Controller
         $token = base64_encode(serialize([
             $result->getId() => time()+20000
         ]));
-        //A revoir
-        //$jwt = JWT::encode($test, self::KEY);
         $result->setToken($token);
         $this->getDoctrine()->getManager()->flush();
 
