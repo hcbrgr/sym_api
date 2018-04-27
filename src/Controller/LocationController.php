@@ -42,6 +42,7 @@ class LocationController extends Controller
      */
     public function index(LocationRepository $locationRepository)
     {
+        // Rendering a page displaying a list of all the registered locations
         return $this->render('location/index.html.twig', ['locations' => $locationRepository->findAll()]);
     }
 
@@ -50,28 +51,23 @@ class LocationController extends Controller
      */
     public function qrCode(LocationRepository $locationRepository)
     {
-        if (isset($_POST['location'])) {
-            $qrLocation = $_POST['location'];
-        } else {
-            $qrLocation = $_GET['l'];
-        }
-
-        $qrString = $qrLocation.date("Y-m-d H:i:s");
-        $qrCode = new QrCode($qrString);
-
+        // Setting the current location either with a POST or a GET method
+        $qrLocation = (isset($_POST['location'])) ? $_POST['location'] : $_GET['l'];
         $em = $this->getDoctrine()->getManager();
         $location = $em->getRepository(Location::class)->find($qrLocation);
+        // Generating the QRCode string by concatenating the location's name and the current timestamp
+        $qrDescription = $location->getDescription();
+        $qrString = $qrDescription."_".date("Ymd_His");
+        $qrCode = new QrCode($qrString);
+        //* Setting the QRCode string in the database */
         $location->setQrCode($qrString);
         $em->persist($location);
         $em->flush();
-
-
+        // Refreshing the page every 30sec and keeping the current location through GET method
         header('Content-Type: '.$qrCode->getContentType());
         header("Refresh:10 url=getQRCode?l=".$qrLocation);
+        // Generating the qrcode.png
         $qrCode->writeFile(__DIR__.'/../../public/img/qrcode.png');
-        $response = new QrCodeResponse($qrCode);
-
-        //return $response;
         return $this->render('location/qrcode.html.twig');
     }
 }
