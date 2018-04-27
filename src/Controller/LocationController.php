@@ -55,7 +55,7 @@ class LocationController extends Controller
     }
     /**
      * @Route("/api/checkIn", name="checkin")
-
+     */
     public function checkin()
     {
         //$location = $this->getDoctrine()->getRepository('App:Location')->find(1);
@@ -66,7 +66,7 @@ class LocationController extends Controller
         }
 
         return $response;
-    }*/
+    }
 
     /**
      * @Route("/getQRCode", name="getqrcode")
