@@ -7,8 +7,8 @@
 </head>
 <body>
 {% block body %}
-    <h1>Select a location</h1>
     <ul class="locationList">
+        <h1>Select a location</h1>
         {% for location in locations %}
             <li class="location">{{ location.description }}
             <form action="/getQRCode" method="POST">

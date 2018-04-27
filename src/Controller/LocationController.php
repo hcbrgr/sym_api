@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use Symfony\Component\Routing\Annotation\Route;
+use App\Entity\Location;
 use App\Repository\CallSheetRepository;
 use App\Repository\EventRepository;
 use App\Repository\LocationRepository;
