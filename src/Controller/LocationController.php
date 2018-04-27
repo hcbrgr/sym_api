@@ -16,11 +16,27 @@ use Endroid\QrCode\Response\QrCodeResponse;
 class LocationController extends Controller
 {
     /**
-     * @Route("/api/location", name="location", methods="GET")
+     * @Route("/", name="location", methods="GET")
      */
     public function index(Request $request)
     {
-        return true;
+
+
+        /*return $this->json([
+            'message' => 'Welcome to your new controller!',
+            'path' => 'src/Controller/LocationController.php',
+        ]);*/
+
+        return $this->render('location/index.html.twig', ['locations' => $locationRepository->findAll()]);
+
+        //$location = $this->getDoctrine()->getRepository('App:Location')->find(1);
+        //return $this->json(['location' => $location]);
+
+        /*$request = Request::createFromGlobals();
+        echo $request->query->get('QRCodeData');
+        if(true){
+            $response = $this->json(['response' => 'OK']);
+        }*/
     }
     /**
      * @Route("/api/checkIn", name="checkin")
