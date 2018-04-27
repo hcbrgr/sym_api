@@ -14,7 +14,7 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
 {
     public function supports(Request $request)
     {
-        if ($request->getUri() === "http://localhost:8000/api/login") {
+        if ($request->getUri() === "http://localhost:8000/api/login" || $request->getUri() === "http://localhost:8000/getQRCode" || $request->getUri() === "http://localhost:8000/") {
             return false;
         }
         if (!$request->headers->has('X-AUTH-TOKEN')) {
