@@ -58,7 +58,22 @@ class LocationController extends Controller
             'path' => 'src/Controller/LocationController.php',
         ]);*/
 
-        return $this->render('location/index.html.twig', ['locations' => $locationRepository->findAll()]);
+        $location = new Location();
+        $form = $this->createForm(LocationType::class, $location);
+        $form->handleRequest($request);
+/*
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($monster);
+            $em->flush();
+
+            return $this->redirectToRoute('monster_index');
+        }*/
+
+        return $this->render('location/index.html.twig', [
+            'location' => $location,
+            'form' => $form->createView(),
+        ]);
 
         //$location = $this->getDoctrine()->getRepository('App:Location')->find(1);
         //return $this->json(['location' => $location]);
@@ -71,7 +86,7 @@ class LocationController extends Controller
     }
     /**
      * @Route("/api/checkIn", name="checkin")
-
+     */
     public function checkin()
     {
         //$location = $this->getDoctrine()->getRepository('App:Location')->find(1);
@@ -82,7 +97,7 @@ class LocationController extends Controller
         }
 
         return $response;
-    }*/
+    }
 
     /**
      * @Route("/getQRCode", name="getqrcode")
