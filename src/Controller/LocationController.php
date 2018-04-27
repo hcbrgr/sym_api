@@ -52,23 +52,35 @@ class LocationController extends Controller
         //return $this->json(['location' => $location]);
 
         if(true){
-            $response = $this->json(['response' => $request]);
+            $response = $this->json(['response' => "Bonjour"]);
         }
 
         return $response;
     }
 
     /**
-     * @Route("/getQRCode", name="getqrcode", methods="POST")
+     * @Route("/getQRCode", name="getqrcode", methods="GET|POST")
      */
-    public function qrCode()
+    public function qrCode(LocationRepository $locationRepository)
     {
-        $qrLocation = 'Salle 7';
+        if (isset($_POST['location'])) {
+            $qrLocation = $_POST['location'];
+        } else {
+            $qrLocation = $_GET['l'];
+        }
+
         $qrString = $qrLocation.date("Y-m-d H:i:s");
         $qrCode = new QrCode($qrString);
 
+        $em = $this->getDoctrine()->getManager();
+        $location = $em->getRepository(Location::class)->find($qrLocation);
+        $location->setQrCode($qrString);
+        $em->persist($location);
+        $em->flush();
+
+
         header('Content-Type: '.$qrCode->getContentType());
-        header("Refresh:10");
+        header("Refresh:10 url=getQRCode?l=".$qrLocation);
         $qrCode->writeFile(__DIR__.'/../../public/img/qrcode.png');
         $response = new QrCodeResponse($qrCode);
 
