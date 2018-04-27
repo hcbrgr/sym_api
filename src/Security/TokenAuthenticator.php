@@ -31,7 +31,6 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
         if (null === $apiKey) {
             return;
         }
-
         return $userProvider->loadUserByUsername($apiKey);
     }
 

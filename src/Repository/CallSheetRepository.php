@@ -19,22 +19,24 @@ class CallSheetRepository extends ServiceEntityRepository
         parent::__construct($registry, CallSheet::class);
     }
 
-//    /**
-//     * @return CallSheet[] Returns an array of CallSheet objects
-//     */
-    /*
-    public function findByExampleField($value)
+    /**
+     * @return CallSheet[] Returns an array of CallSheet objects
+     */
+
+    public function findLocationByUser($user, $date)
     {
         return $this->createQueryBuilder('c')
-            ->andWhere('c.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('c.id', 'ASC')
-            ->setMaxResults(10)
+            ->join('c.event', 'e')
+            ->join('e.location', 'l')
+            ->andWhere('c.user = :user AND c.event = e.id AND e.date >= :date AND e.location = l.id')
+            ->setParameter('user', $user)
+            ->setParameter('date', $date)
+            ->orderBy('e.date', 'ASC')
+            ->setMaxResults(1)
             ->getQuery()
             ->getResult()
         ;
     }
-    */
 
     /*
     public function findOneBySomeField($value): ?CallSheet
