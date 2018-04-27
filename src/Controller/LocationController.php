@@ -55,20 +55,19 @@ class LocationController extends Controller
     }
     /**
      * @Route("/api/checkIn", name="checkin")
-     */
+
     public function checkin()
     {
         //$location = $this->getDoctrine()->getRepository('App:Location')->find(1);
         //return $this->json(['location' => $location]);
 
-        $request = Request::createFromGlobals();
-        $request->query->get('QRCodeData');
         if(true){
             $response = $this->json(['response' => $request]);
         }
 
         return $response;
-    }
+    }*/
+
     /**
      * @Route("/getQRCode", name="getqrcode")
      */

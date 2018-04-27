@@ -104,6 +104,11 @@ class User implements UserInterface
         return $this;
     }
 
+    public function getRoles()
+    {
+        return array('ROLE_USER');
+    }
+
     /**
      * @return Collection|CallSheet[]
      */
@@ -134,11 +139,6 @@ class User implements UserInterface
 
         return $this;
     }*/
-
-    public function getRoles()
-    {
-
-    }
 
     public function getSalt()
     {
