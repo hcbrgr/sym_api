@@ -27,6 +27,7 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
     public function getUser($credentials, UserProviderInterface $userProvider)
     {
         $apiKey = $credentials['token'];
+
         if (null === $apiKey) {
             return;
         }
@@ -46,6 +47,7 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
 
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception)
     {
+
         $data = array(
             'message' => strtr($exception->getMessageKey(), $exception->getMessageData())
 
