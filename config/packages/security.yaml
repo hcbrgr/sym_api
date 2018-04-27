@@ -15,8 +15,7 @@ security:
                 authenticators:
                     - App\Security\TokenAuthenticator
     access_control:
-        - { path: /api/refreshToken, roles: ROLE_USER }
-        - { path: /api/getLocation, roles: ROLE_USER }
-        - { path: /api/checkIn, roles: ROLE_USER }
+        - { path: /api/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/api, roles: ROLE_USER }
         - { path: /, roles: ROLE_USER }
         - { path: /getQRCode, roles: ROLE_USER }
