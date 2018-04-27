@@ -14,12 +14,17 @@ class CallSheetController extends Controller
      */
     public function checkIn(Request $request): Response
     {
-        /*$content = json_decode($request->getContent());
-        if(
+        $content = json_decode($request->getContent());
+        if (
             !isset($content->QRCodeData) || empty($content->QRCodeData) ||
             !isset($content->date) || empty($content->date) ||
             !isset($content->beaconCollection) || empty($content->beaconCollection) ||
-            !isset($content->beaconCollection) || empty($content->)
-        )*/
+            !isset($content->beaconCollection) || empty($content->Token)
+        ) {
+
+            return $this->json(['error' => 'Element(s) non fournis'], 422);
+        }
+
+        return $this->json(['error' => 'cc'], 200);
     }
 }

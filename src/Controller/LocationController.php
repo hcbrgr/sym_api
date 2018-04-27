@@ -44,20 +44,6 @@ class LocationController extends Controller
     {
         return $this->render('location/index.html.twig', ['locations' => $locationRepository->findAll()]);
     }
-    /**
-     * @Route("/api/checkIn", name="checkin")
-     */
-    public function checkin()
-    {
-        //$location = $this->getDoctrine()->getRepository('App:Location')->find(1);
-        //return $this->json(['location' => $location]);
-
-        if(true){
-            $response = $this->json(['response' => "Bonjour"]);
-        }
-
-        return $response;
-    }
 
     /**
      * @Route("/getQRCode", name="getqrcode", methods="GET|POST")
