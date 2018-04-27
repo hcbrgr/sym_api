@@ -4,7 +4,7 @@ body{
 }
 .qrcode{
     background-color: #ffffff;
-    padding: 40px 60px 60px;
+    padding: 40px 50px 50px;
     display: inline-block;
     margin: 60px auto 0 auto;
 }
@@ -12,4 +12,25 @@ h1{
     color: #444444;
     margin: 0 0 20px 0;
     font-family: Arial;
+}
+
+
+.locationList{
+    background-color: #ffffff;
+    padding: 35px 50px;
+    display: inline-block;
+    margin: 60px auto 0 auto;
+    text-align: left;
+    min-width: 150px;
+}
+.location{
+    display: block;
+    margin: 15px 0;
+    padding: 8px 12px;
+    background-color: #fafafa;
+    display: flex;
+    justify-content: space-between;
+}
+form{
+    display: inline-block;
 }

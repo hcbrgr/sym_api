@@ -3,20 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <title>{% block title %}Class call{% endblock %}</title>
-    {% block stylesheets %}{% endblock %}
+    {% block stylesheets %}<link rel="stylesheet" href="{{ asset('style.css') }}" />{% endblock %}
 </head>
 <body>
 {% block body %}
     <h1>Select a location</h1>
+    <ul class="locationList">
         {% for location in locations %}
-        <tr>
-            <td>{{ location.description }}</td>
-        </tr>
+            <li class="location">{{ location.description }}
+            <form action="/getQRCode" method="POST">
+                <input type="hidden" name="location" value="{{ location.id }}">
+                <input type="submit" value="Envoyer">
+            </form>
+            </li>
         {% else %}
-            <tr>
-                <td colspan="4">no records found</td>
-            </tr>
+            <li>no records found</li>
         {% endfor %}
+    </ul>
 {% endblock %}
 {% block javascripts %}{% endblock %}
 </body>
