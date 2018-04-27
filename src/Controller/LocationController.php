@@ -3,6 +3,10 @@
 namespace App\Controller;
 
 use App\Entity\Location;
+use App\Entity\CallSheet;
+use App\Entity\Event;
+use App\Repository\CallSheetRepository;
+use App\Repository\EventRepository;
 use App\Repository\LocationRepository;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
@@ -15,6 +19,33 @@ use Endroid\QrCode\Response\QrCodeResponse;
 
 class LocationController extends Controller
 {
+
+    /**
+     * @Route("/api/getLocation", name="get_location", methods="GET")
+     */
+    public function getLocation(Request $request, CallSheetRepository $callSheetRepository, EventRepository $eventRepository, LocationRepository $locationRepository)
+    {
+        if (!$request->headers->has('X-AUTH-TOKEN')) {
+
+            return $this->json(['error' => 'Veuillez envoyer un token'], 404);
+        }
+        $token = base64_decode($request->headers->get('X-AUTH-TOKEN'));
+        $userId = key(unserialize($token));
+        $nowDate = new \DateTime();
+        $currentDate = $nowDate->format('Y-m-d H:i:s');
+        $eventObj = $callSheetRepository
+                ->findLocationByUser($userId, $currentDate);
+        $localisation = reset($eventObj)
+                ->getEvent()
+                ->getLocation()
+                ->getDescription();
+        $date = reset($eventObj)
+                ->getEvent()
+                ->getDate();
+
+        return $this->json(['location' => $localisation, "date" => $date ], 200);
+    }
+
     /**
      * @Route("/", name="location", methods="GET")
      */
