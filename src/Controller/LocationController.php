@@ -9,7 +9,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Endroid\QrCode\QrCode;
 use Endroid\QrCode\Response\QrCodeResponse;
-use Symfony\Component\HttpFoundation\Request;
 
 
 
@@ -28,7 +27,22 @@ class LocationController extends Controller
             'path' => 'src/Controller/LocationController.php',
         ]);*/
 
-        return $this->render('location/index.html.twig', ['locations' => $locationRepository->findAll()]);
+        $location = new Location();
+        $form = $this->createForm(LocationType::class, $location);
+        $form->handleRequest($request);
+/*
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($monster);
+            $em->flush();
+
+            return $this->redirectToRoute('monster_index');
+        }*/
+
+        return $this->render('location/index.html.twig', [
+            'location' => $location,
+            'form' => $form->createView(),
+        ]);
 
         //$location = $this->getDoctrine()->getRepository('App:Location')->find(1);
         //return $this->json(['location' => $location]);
