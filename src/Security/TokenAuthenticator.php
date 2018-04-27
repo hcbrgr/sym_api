@@ -14,7 +14,13 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
 {
     public function supports(Request $request)
     {
-        return $request->headers->has('X-AUTH-TOKEN');
+        if ($request->getUri() === "http://localhost:8000/api/login") {
+            return false;
+        }
+        if (!$request->headers->has('X-AUTH-TOKEN')) {
+            return new JsonResponse(['error' => "Veuillez envoyer un token"], 404);
+        }
+        return true;
     }
 
     public function getCredentials(Request $request)

@@ -26,4 +26,6 @@ security:
     # Note: Only the *first* access control that matches will be used
     access_control:
         # - { path: ^/admin, roles: ROLE_ADMIN }
-        - { path: ^/api, roles: ROLE_USER }
+        - { path: /api/getLocation, roles: ROLE_USER }
+        - { path: /api/refreshToken, roles: ROLE_USER }
+        - { path: /api/checkIn, roles: ROLE_USER }
