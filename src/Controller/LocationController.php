@@ -49,40 +49,9 @@ class LocationController extends Controller
     /**
      * @Route("/", name="location", methods="GET")
      */
-    public function index(Request $request)
+    public function index(LocationRepository $locationRepository)
     {
-
-
-        /*return $this->json([
-            'message' => 'Welcome to your new controller!',
-            'path' => 'src/Controller/LocationController.php',
-        ]);*/
-
-        $location = new Location();
-        $form = $this->createForm(LocationType::class, $location);
-        $form->handleRequest($request);
-/*
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($monster);
-            $em->flush();
-
-            return $this->redirectToRoute('monster_index');
-        }*/
-
-        return $this->render('location/index.html.twig', [
-            'location' => $location,
-            'form' => $form->createView(),
-        ]);
-
-        //$location = $this->getDoctrine()->getRepository('App:Location')->find(1);
-        //return $this->json(['location' => $location]);
-
-        /*$request = Request::createFromGlobals();
-        echo $request->query->get('QRCodeData');
-        if(true){
-            $response = $this->json(['response' => 'OK']);
-        }*/
+        return $this->render('location/index.html.twig', ['locations' => $locationRepository->findAll()]);
     }
     /**
      * @Route("/api/checkIn", name="checkin")
@@ -100,18 +69,20 @@ class LocationController extends Controller
     }
 
     /**
-     * @Route("/getQRCode", name="getqrcode")
+     * @Route("/getQRCode", name="getqrcode", methods="POST")
      */
     public function qrCode()
     {
         $qrLocation = 'Salle 7';
-        $qrDate = date("Y-m-d H:i:s");
-        $qrCode = new QrCode($qrLocation.$qrDate);
+        $qrString = $qrLocation.date("Y-m-d H:i:s");
+        $qrCode = new QrCode($qrString);
 
         header('Content-Type: '.$qrCode->getContentType());
         header("Refresh:10");
+        $qrCode->writeFile(__DIR__.'/../../public/img/qrcode.png');
         $response = new QrCodeResponse($qrCode);
 
-        return $response;
+        //return $response;
+        return $this->render('location/qrcode.html.twig');
     }
 }

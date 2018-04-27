@@ -8,15 +8,15 @@
 <body>
 {% block body %}
     <h1>Select a location</h1>
-    {{ form(form, {'method': 'GET'}) }}
-    {{ form_start(form) }}
-        {{ form_errors(form) }}
-
-        {{ form_row(form.name) }}
-        {{ form_row(form.dueDate) }}
-
-        {{ form_row(form.submit, { 'label': 'Submit me' }) }}
-    {{ form_end(form) }}
+        {% for location in locations %}
+        <tr>
+            <td>{{ location.description }}</td>
+        </tr>
+        {% else %}
+            <tr>
+                <td colspan="4">no records found</td>
+            </tr>
+        {% endfor %}
 {% endblock %}
 {% block javascripts %}{% endblock %}
 </body>
