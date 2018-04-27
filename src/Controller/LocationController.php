@@ -17,24 +17,18 @@ use Symfony\Component\HttpFoundation\Request;
 class LocationController extends Controller
 {
     /**
-<<<<<<< HEAD
-     * @Route("/api/location", name="location", methods="GET")
-=======
-     * @Route("/", name="location")
->>>>>>> 4b4db6b11a01b0ba6d8810e82224bf9fa23ae9c5
+     * @Route("/", name="location", methods="GET")
      */
     public function index(Request $request)
     {
-<<<<<<< HEAD
-        $location = $this->getDoctrine()->getRepository('App:Location')->find(1);
-        return $this->json(['location' => $location]);
-=======
+
+
         /*return $this->json([
             'message' => 'Welcome to your new controller!',
             'path' => 'src/Controller/LocationController.php',
         ]);*/
 
-        return $this->render('location/index.html.twig', ['pastries' => $locationRepository->findAll()]);
+        return $this->render('location/index.html.twig', ['locations' => $locationRepository->findAll()]);
 
         //$location = $this->getDoctrine()->getRepository('App:Location')->find(1);
         //return $this->json(['location' => $location]);
@@ -75,6 +69,5 @@ class LocationController extends Controller
         $response = new QrCodeResponse($qrCode);
 
         return $response;
->>>>>>> 4b4db6b11a01b0ba6d8810e82224bf9fa23ae9c5
     }
 }
