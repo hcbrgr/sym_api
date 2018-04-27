@@ -38,16 +38,26 @@ class CallSheet
      */
     private $late;
 
+    /**
+     * @return mixed
+     */
     public function getId()
     {
         return $this->id;
     }
 
+    /**
+     * @return User|null
+     */
     public function getUser(): ?User
     {
         return $this->user;
     }
 
+    /**
+     * @param User|null $user
+     * @return CallSheet
+     */
     public function setUser(?User $user): self
     {
         $this->user = $user;
@@ -55,11 +65,18 @@ class CallSheet
         return $this;
     }
 
+    /**
+     * @return Event|null
+     */
     public function getEvent(): ?Event
     {
         return $this->event;
     }
 
+    /**
+     * @param Event|null $event
+     * @return CallSheet
+     */
     public function setEvent(?Event $event): self
     {
         $this->event = $event;
@@ -67,11 +84,18 @@ class CallSheet
         return $this;
     }
 
+    /**
+     * @return bool|null
+     */
     public function getPresent(): ?bool
     {
         return $this->present;
     }
 
+    /**
+     * @param bool $present
+     * @return CallSheet
+     */
     public function setPresent(bool $present): self
     {
         $this->present = $present;
@@ -79,11 +103,18 @@ class CallSheet
         return $this;
     }
 
+    /**
+     * @return bool|null
+     */
     public function getLate(): ?bool
     {
         return $this->late;
     }
 
+    /**
+     * @param bool $late
+     * @return CallSheet
+     */
     public function setLate(bool $late): self
     {
         $this->late= $late;

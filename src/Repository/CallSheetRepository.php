@@ -23,7 +23,7 @@ class CallSheetRepository extends ServiceEntityRepository
      * @return CallSheet[] Returns an array of CallSheet objects
      */
 
-    public function findLocationByUser($user, $date)
+    public function findLocationByUser(int $user, string $date)
     {
         return $this->createQueryBuilder('c')
             ->join('c.event', 'e')
@@ -38,15 +38,21 @@ class CallSheetRepository extends ServiceEntityRepository
         ;
     }
 
-    /*
-    public function findOneBySomeField($value): ?CallSheet
+    public function findEventNow(string $qrcode, int $user, int $beacon, string $date)
     {
         return $this->createQueryBuilder('c')
-            ->andWhere('c.exampleField = :val')
-            ->setParameter('val', $value)
+            ->join('c.event', 'e')
+            ->join('e.location', 'l')
+            ->andWhere('c.user = :user AND c.event = e.id AND e.date >= :date AND e.location = l.id AND l.qrcode = :qrcode AND l.beacon = :beacon')
+            ->setParameter('qrcode', $qrcode)
+            ->setParameter('beacon', $beacon)
+            ->setParameter('date', $date)
+            ->setParameter('user', $user)
+            ->orderBy('e.date', 'ASC')
+            ->setMaxResults(1)
             ->getQuery()
-            ->getOneOrNullResult()
-        ;
+            ->getResult()
+            ;
+        
     }
-    */
 }
