@@ -33,6 +33,11 @@ class CallSheet
      */
     private $present;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $late;
+
     public function getId()
     {
         return $this->id;
@@ -70,6 +75,18 @@ class CallSheet
     public function setPresent(bool $present): self
     {
         $this->present = $present;
+
+        return $this;
+    }
+
+    public function getLate(): ?bool
+    {
+        return $this->late;
+    }
+
+    public function setLate(bool $late): self
+    {
+        $this->late= $late;
 
         return $this;
     }

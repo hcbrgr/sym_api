@@ -8,15 +8,14 @@ use Doctrine\DBAL\Schema\Schema;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-class Version20180427112414 extends AbstractMigration
+class Version20180427132356 extends AbstractMigration
 {
     public function up(Schema $schema)
     {
         // this up() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
-        $this->addSql('ALTER TABLE location ADD beacon INT NOT NULL, DROP minor, DROP major');
-        $this->addSql('ALTER TABLE user ADD roles VARCHAR(40) DEFAULT NULL');
+        $this->addSql('ALTER TABLE call_sheet ADD late TINYINT(1) NOT NULL');
     }
 
     public function down(Schema $schema)
@@ -24,7 +23,6 @@ class Version20180427112414 extends AbstractMigration
         // this down() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
-        $this->addSql('ALTER TABLE location ADD major INT NOT NULL, CHANGE beacon minor INT NOT NULL');
-        $this->addSql('ALTER TABLE user DROP roles');
+        $this->addSql('ALTER TABLE call_sheet DROP late');
     }
 }
