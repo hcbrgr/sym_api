@@ -48,10 +48,8 @@ class CallSheetRepository extends ServiceEntityRepository
             ->setParameter('beacon', $beacon)
             ->setParameter('date', $date)
             ->setParameter('user', $user)
-            ->orderBy('e.date', 'ASC')
-            ->setMaxResults(1)
             ->getQuery()
-            ->getResult()
+            ->getOneOrNullResult()
             ;
         
     }
