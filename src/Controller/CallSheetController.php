@@ -43,15 +43,14 @@ class CallSheetController extends Controller
             $content->beaconCollection[2],
             $content->date
         );
-        dump($result);
         if (!$result) {
 
-            return $this->json(['Error' => 'Aucun résultat retourné, veuillez attendre le prochain QRCode'], 200);
+            return $this->json(['Error' => 'Aucun résultat retourné, veuillez attendre le prochain QRCode'], 404);
         }
         $callSheet = $em
             ->getRepository(CallSheet::class)
             ->find($result->getId());
-        if ($result->getEvent()->getDate() >= new \DateTime()) {
+        if ($result->getEvent()->getStartDate() >= new \DateTime() && $result->getEvent()->getEndDate() <= new \DateTime()) {
             $callSheet->setPresent(1);
         }else{
             $callSheet->setLate(1);
