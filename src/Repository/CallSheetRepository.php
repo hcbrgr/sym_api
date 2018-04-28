@@ -20,9 +20,10 @@ class CallSheetRepository extends ServiceEntityRepository
     }
 
     /**
-     * @return CallSheet[] Returns an array of CallSheet objects
+     * @param int $user
+     * @param string $date
+     * @return mixed
      */
-
     public function findLocationByUser(int $user, string $date)
     {
         return $this->createQueryBuilder('c')
@@ -38,6 +39,14 @@ class CallSheetRepository extends ServiceEntityRepository
         ;
     }
 
+    /**
+     * @param string $qrcode
+     * @param int $user
+     * @param int $beacon
+     * @param string $date
+     * @return mixed
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
     public function findEventNow(string $qrcode, int $user, int $beacon, string $date)
     {
         return $this->createQueryBuilder('c')
@@ -51,6 +60,18 @@ class CallSheetRepository extends ServiceEntityRepository
             ->getQuery()
             ->getOneOrNullResult()
             ;
-        
+    }
+
+    public function findByUserAndAbsence(int $userId, string $date)
+    {
+        return $this->createQueryBuilder('c')
+        ->join('c.event', 'e')
+        ->andWhere('c.user = :user AND c.present = 0 AND e.endDate <= :date')
+        ->setParameter('user', $userId)
+        ->setParameter('date', $date)
+        ->orderBy('e.id', 'ASC')
+        ->getQuery()
+        ->getResult()
+        ;
     }
 }

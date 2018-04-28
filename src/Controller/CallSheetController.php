@@ -11,7 +11,12 @@ use App\Repository\CallSheetRepository;
 
 class CallSheetController extends Controller
 {
+
     /**
+     * @param Request $request
+     * @param CallSheetRepository $callSheetRepository
+     * @return Response
+     * @throws \Doctrine\ORM\NonUniqueResultException
      * @Route("/api/checkIn", name="api_check_in", methods="POST")
      */
     public function checkIn(Request $request, CallSheetRepository $callSheetRepository): Response
@@ -50,7 +55,7 @@ class CallSheetController extends Controller
         $callSheet = $em
             ->getRepository(CallSheet::class)
             ->find($result->getId());
-        if ($result->getEvent()->getStartDate() >= new \DateTime() && $result->getEvent()->getEndDate() <= new \DateTime()) {
+        if ($result->getEvent()->getStartDate() <= new \DateTime() && $result->getEvent()->getEndDate() >= new \DateTime()) {
             $callSheet->setPresent(1);
         }else{
             $callSheet->setLate(1);
@@ -59,5 +64,20 @@ class CallSheetController extends Controller
         $em->flush();
 
         return $this->json(['Success' => 'Réussi'], 200);
+    }
+
+    /**
+     * @Route("/api/report/{id}", name="api_report", methods="GET")
+     */
+    public function report(int $id, CallSheetRepository $callSheetRepository): Response
+    {
+        $result = $callSheetRepository->findByUserAndAbsence($id, date('Y-m-d H:i:s'));
+        dump($result);
+        if (!$result) {
+
+            return $this->json(['error' => 'C\'est cassée'],422);
+        }
+
+        return $this->json(['success' => 'bien joué gros con'],200);
     }
 }
