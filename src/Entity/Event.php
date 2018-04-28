@@ -32,7 +32,12 @@ class Event
     /**
      * @ORM\Column(type="datetime_immutable")
      */
-    private $date;
+    private $startDate;
+
+    /**
+     * @ORM\Column(type="datetime_immutable")
+     */
+    private $endDate;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\CallSheet", mappedBy="event_id")
@@ -73,14 +78,26 @@ class Event
         return $this;
     }
 
-    public function getDate(): ?\DateTimeImmutable
+    public function getStartDate(): ?\DateTimeImmutable
     {
-        return $this->date;
+        return $this->startDate;
     }
 
-    public function setDate(\DateTimeImmutable $date): self
+    public function setStartDate(\DateTimeImmutable $startDate): self
     {
-        $this->date = $date;
+        $this->startDate = $startDate;
+
+        return $this;
+    }
+
+    public function getEndDate(): ?\DateTimeImmutable
+    {
+        return $this->endDate;
+    }
+
+    public function setEndDate(\DateTimeImmutable $endDate): self
+    {
+        $this->endDate = $endDate;
 
         return $this;
     }
