@@ -84,10 +84,9 @@ class ApiController extends Controller
     {
         $token = base64_decode($request->headers->get('X-AUTH-TOKEN'));
         $userId = key(unserialize($token));
-        $currentDate = (new \DateTime())->format('Y-m-d H:i:s');
+        $currentDate = (new \DateTime('now', new \DateTimeZone('Europe/Paris')))->format('Y-m-d H:i:s');
         $eventObj = $callSheetRepository
             ->findLocationByUser($userId, $currentDate);
-        dump($eventObj);
         if (empty($eventObj)) {
 
             return $this->json(['error' => 'Next location not found'], 422);
@@ -98,7 +97,7 @@ class ApiController extends Controller
             ->getDescription();
         $date = reset($eventObj)
             ->getEvent()
-            ->getDate();
+            ->getStartDate()->format('Y-m-d H:i:s');
 
         return $this->json(['location' => $localisation, "date" => $date ], 200);
     }
@@ -176,6 +175,10 @@ class ApiController extends Controller
         $resultDate =  $result->getEvent()->getStartDate();
         $eventDate = new \DateTime(reset($resultDate ));
         $interval = (new \DateTime($content->date))->diff($eventDate);
+        if ($callSheet->getPresent()) {
+
+            return $this->json(['error' => 'You have already flashed the QR code'], 400);
+        }
         ($interval->i <= 10) ? $callSheet->setPresent(1) : $callSheet->setLate(1);
         $em->persist($callSheet);
         $em->flush();
@@ -193,7 +196,7 @@ class ApiController extends Controller
             return $this->json(['error' => 'Token required'],422);
         }
         $id = key(unserialize(base64_decode($request->headers->get('X-Auth-Token'))));
-        $date = new \DateTime();
+        $date = new \DateTime('now', new \DateTimeZone('Europe/Paris'));
         $currentDate = $date->format('Y-m-d H:i:s');
         $limit = $date
             ->modify('-1 month')

@@ -4,7 +4,7 @@ namespace App\Tests;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
-class UserControllerTest extends WebTestCase
+class ApiControllerTest extends WebTestCase
 {
 
     private $client = null;
@@ -16,28 +16,30 @@ class UserControllerTest extends WebTestCase
     /**
      * @test
      */
-    /*public function loginTest()
+    public function loginTest()
     {
         $this->client->request('POST', '/api/login', [], [], ['CONTENT_TYPE' => 'application/json'], '{"Email":"lala@lala.com", "Password":"password"}');
-        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
+        $response = $this->client->getResponse();
+        $this->assertEquals(200, $response->getStatusCode());
         $this->assertContains('token', $response->getContent());
-    }*/
+    }
 
     /**
      * @test
      */
-    /*public function refreshTokenTest()
+    public function refreshTokenTest()
     {
 
         $this->client->request('POST', '/api/refreshToken', [], [],
             [
                 'CONTENT_TYPE' => 'application/json',
-                'HTTP_X-AUTH-TOKEN' => 'YToxOntpOjE7aToxNTI0OTQyMTkwO30='
+                'HTTP_X-AUTH-TOKEN' => 'YToxOntpOjE7aToxNTI1MDI1MTk0O30='
             ],
-            '{"token": "YToxOntpOjE7aToxNTI0OTQyMTkwO30="}');
-        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
+            '{"token": "YToxOntpOjE7aToxNTI1MDI1MTk0O30="}');
+        $response = $this->client->getResponse();
+        $this->assertEquals(200, $response->getStatusCode());
         $this->assertContains('token', $response->getContent());
-    }*/
+    }
 
     /**
      * @test
@@ -55,15 +57,15 @@ class UserControllerTest extends WebTestCase
     /**
      * @test
      */
-    /*public function checkInTest()
+    public function checkInDoneTest()
     {
         $this->client->request('POST', "/api/checkIn" ,[], [], [
             'HTTP_X-AUTH-TOKEN' => 'YToxOntpOjE7aToxNTI1MDI1MTk0O30=',
             'CONTENT_TYPE' => 'application/json'
         ],
             '{
-                        "QRCodeData" : "Description_20180429_092903",
-                        "date": "2018-04-29 10:00:00",
+                        "QRCodeData" : "Salle7_20180429_131140",
+                        "date": "2018-04-29 17:05:00",
                         "beaconCollection":
                         [
                             65535,
@@ -76,15 +78,41 @@ class UserControllerTest extends WebTestCase
         $response = $this->client->getResponse();
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertContains('OK', $response->getContent());
-    }*/
+    }
 
     /**
      * @test
      */
-    /*public function reportTest()
+    public function checkInFailTest()
+    {
+        $this->client->request('POST', "/api/checkIn" ,[], [], [
+            'HTTP_X-AUTH-TOKEN' => 'YToxOntpOjE7aToxNTI1MDI1MTk0O30=',
+            'CONTENT_TYPE' => 'application/json'
+        ],
+            '{
+                        "QRCodeData" : "Salle7_20180429_131140",
+                        "date": "2018-04-29 17:06:00",
+                        "beaconCollection":
+                        [
+                            65535,
+                            381, 
+                            4294902141
+                        ],
+	                       "Token": "YToxOntpOjE7aToxNTI1MDI1MTk0O30="
+                    }'
+        );
+        $response = $this->client->getResponse();
+        $this->assertEquals(400, $response->getStatusCode());
+        $this->assertContains('error', $response->getContent());
+    }
+
+    /**
+     * @test
+     */
+    public function reportTest()
     {
         $this->client->request('GET', "/api/report", [], [], [
-                'HTTP_X-AUTH-TOKEN' => 'YToxOntpOjE7aToxNTI0OTQ4NTM0O30=',
+                'HTTP_X-AUTH-TOKEN' => 'YToxOntpOjE7aToxNTI1MDI1MTk0O30=',
                 'CONTENT_TYPE' => 'application/json'
             ]
         );
@@ -93,5 +121,5 @@ class UserControllerTest extends WebTestCase
         $this->assertContains('absences', $response->getContent());
         $this->assertContains('lates', $response->getContent());
         $this->assertContains('present', $response->getContent());
-    }*/
+    }
 }
