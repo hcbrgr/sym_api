@@ -67,13 +67,14 @@ class CallSheetRepository extends ServiceEntityRepository
      * @param string $date
      * @return mixed
      */
-    public function findByUserAndAbsence(int $userId, string $date)
+    public function findByUserAndAbsence(int $userId, string $date, string $limit)
     {
         return $this->createQueryBuilder('c')
         ->join('c.event', 'e')
-        ->andWhere('c.user = :user AND c.present = 0 AND e.endDate <= :date AND c.late = 0')
+        ->andWhere('c.user = :user AND c.present = 0 AND c.late = 0 AND e.endDate <= :date AND e.startDate >= :limit')
         ->setParameter('user', $userId)
         ->setParameter('date', $date)
+        ->setParameter('limit', $limit)
         ->orderBy('e.id', 'ASC')
         ->getQuery()
         ->getResult()
@@ -85,13 +86,14 @@ class CallSheetRepository extends ServiceEntityRepository
      * @param string $date
      * @return mixed
      */
-    public function findByUserAndLate(int $userId, string $date)
+    public function findByUserAndLate(int $userId, string $date, string $limit)
     {
         return $this->createQueryBuilder('c')
             ->join('c.event', 'e')
-            ->andWhere('c.user = :user AND c.present = 0 AND e.endDate <= :date AND c.late = 1')
+            ->andWhere('c.user = :user AND c.present = 0 AND c.late = 1 AND e.endDate <= :date AND e.startDate >= :limit')
             ->setParameter('user', $userId)
             ->setParameter('date', $date)
+            ->setParameter('limit', $limit)
             ->orderBy('e.id', 'ASC')
             ->getQuery()
             ->getResult()
@@ -103,13 +105,14 @@ class CallSheetRepository extends ServiceEntityRepository
      * @param string $date
      * @return mixed
      */
-    public function findByUserAndPresent(int $userId, string $date)
+    public function findByUserAndPresent(int $userId, string $date, string $limit)
     {
         return $this->createQueryBuilder('c')
             ->join('c.event', 'e')
-            ->andWhere('c.user = :user AND c.present = 1 AND e.endDate <= :date AND c.late = 0')
+            ->andWhere('c.user = :user AND c.present = 1 AND c.late = 0 AND e.endDate <= :date AND e.startDate >= :limit')
             ->setParameter('user', $userId)
             ->setParameter('date', $date)
+            ->setParameter('limit', $limit)
             ->orderBy('e.id', 'ASC')
             ->getQuery()
             ->getResult()

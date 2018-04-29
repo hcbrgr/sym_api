@@ -29,22 +29,22 @@ class UserControllerTest extends WebTestCase
     /**
      * @test
      */
-    /*public function refreshToken()
+    /*public function refreshTokenTest()
     {
-        $client = static::createClient();
-        $client->request('POST', '/api/refreshToken', [], [],
+
+        $this->client->request('POST', '/api/refreshToken', [], [],
             [
                 'CONTENT_TYPE' => 'application/json',
                 'HTTP_X-AUTH-TOKEN' => 'YToxOntpOjE7aToxNTI0OTQyMTkwO30='
             ],
             '{"token": "YToxOntpOjE7aToxNTI0OTQyMTkwO30="}');
-        $this->assertEquals(200, $client->getResponse()->getStatusCode());
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
     }
 
     /**
      * @test
      */
-    /*public function getLocation()
+    /*public function getLocationTest()
     {
         $this->client->request('GET', '/api/getLocation', [], [], ['HTTP_X-AUTH-TOKEN' => 'YToxOntpOjE7aToxNTI0OTQ3MzA3O30=']);
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
@@ -53,20 +53,18 @@ class UserControllerTest extends WebTestCase
     /**
      * @test
      */
-    /*public function getQRcode()
+    /*public function getQRcodeTest()
     {
-        $client = static::createClient();
-        $client->request('POST', '/getQRCode', [], ['location' => 1], [], ['HTTP_X-AUTH-TOKEN' => 'YToxOntpOjE7aToxNTI0OTQ0MDYwO30=']);
-        $this->assertEquals(200, $client->getResponse()->getStatusCode());
+        $this->client->request('POST', '/getQRCode', [], ['location' => 1], [], ['HTTP_X-AUTH-TOKEN' => 'YToxOntpOjE7aToxNTI0OTQ0MDYwO30=']);
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
     }*/
 
     /**
      * @test
      */
-    public function checkIn()
+    public function checkInTest()
     {
-        $client = static::createClient();
-        $client->request('POST', "/api/checkIn" ,[], [], [
+        $this->client->request('POST', "/api/checkIn" ,[], [], [
             'HTTP_X-AUTH-TOKEN' => 'YToxOntpOjE7aToxNTI0OTQ4NTM0O30=',
             'CONTENT_TYPE' => 'application/json'
         ],
@@ -82,6 +80,19 @@ class UserControllerTest extends WebTestCase
 	                       "Token": "YToxOntpOjE7aToxNTI0OTQ4NTM0O30="
                     }'
         );
-        $this->assertEquals(200, $client->getResponse()->getStatusCode());
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
+    }
+
+    /**
+     * @test
+     */
+    public function reportTest()
+    {
+        $this->client->request('GET', "/api/report/2" ,[], [], [
+            'HTTP_X-AUTH-TOKEN' => 'YToxOntpOjE7aToxNTI0OTQ4NTM0O30=',
+            'CONTENT_TYPE' => 'application/json'
+            ]
+        );
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
     }
 }
