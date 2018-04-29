@@ -124,7 +124,7 @@ class ApiControllerTest extends WebTestCase
     }
 
     /**
-     * Test if the report method works and send the goog key
+     * Test if the report method works and send the good key in json
      *
      * @test
      */

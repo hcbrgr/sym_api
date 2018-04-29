@@ -39,6 +39,7 @@ class CallSheet
     private $late;
 
     /**
+     * Get the call sheet id
      * @return mixed
      */
     public function getId()
@@ -47,6 +48,7 @@ class CallSheet
     }
 
     /**
+     * Get the call sheet user
      * @return User|null
      */
     public function getUser(): ?User
@@ -55,6 +57,7 @@ class CallSheet
     }
 
     /**
+     * Set the call sheet user
      * @param User|null $user
      * @return CallSheet
      */
@@ -66,6 +69,7 @@ class CallSheet
     }
 
     /**
+     * Get the call sheet event
      * Get the event object
      * @return Event|null
      */

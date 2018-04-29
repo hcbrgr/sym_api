@@ -92,7 +92,7 @@ class Event
     }
 
     /**
-     * Set the location of the event
+     * Set the event location
      * @param Location|null $location
      * @return Event
      */
@@ -104,7 +104,7 @@ class Event
     }
 
     /**
-     * Get the start date of the event
+     * Get the event start date
      * @return \DateTimeImmutable|null
      */
     public function getStartDate(): ?\DateTimeImmutable
@@ -113,7 +113,7 @@ class Event
     }
 
     /**
-     * Set the start date of the event
+     * Set the event start date
      * @param \DateTimeImmutable $startDate
      * @return Event
      */
@@ -125,7 +125,7 @@ class Event
     }
 
     /**
-     * Get the end date of the event
+     * Get the event end date
      * @return \DateTimeImmutable|null
      */
     public function getEndDate(): ?\DateTimeImmutable
@@ -134,7 +134,7 @@ class Event
     }
 
     /**
-     * Set the end date of the event
+     * Set the event end date
      * @param \DateTimeImmutable $endDate
      * @return Event
      */
