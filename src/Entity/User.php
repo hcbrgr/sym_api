@@ -50,6 +50,7 @@ class User implements UserInterface
     }
 
     /**
+     * Get the user id
      * @return mixed
      */
     public function getId()
@@ -58,6 +59,7 @@ class User implements UserInterface
     }
 
     /**
+     * Get the user token
      * @return null|string
      */
     public function getToken(): ?string
@@ -66,6 +68,7 @@ class User implements UserInterface
     }
 
     /**
+     * Set the user token
      * @param null|string $token
      * @return User
      */
@@ -77,6 +80,7 @@ class User implements UserInterface
     }
 
     /**
+     * Get the user name
      * @return null|string
      */
     public function getName(): ?string
@@ -85,6 +89,7 @@ class User implements UserInterface
     }
 
     /**
+     * Set the user name
      * @param string $name
      * @return User
      */
@@ -96,6 +101,7 @@ class User implements UserInterface
     }
 
     /**
+     * Get the user email
      * @return null|string
      */
     public function getEmail(): ?string
@@ -104,6 +110,7 @@ class User implements UserInterface
     }
 
     /**
+     * Set the user email
      * @param string $email
      * @return User
      */
@@ -115,6 +122,7 @@ class User implements UserInterface
     }
 
     /**
+     * Get the user password
      * @return null|string
      */
     public function getPassword(): ?string
@@ -123,6 +131,7 @@ class User implements UserInterface
     }
 
     /**
+     * Set the user password
      * @param string $password
      * @return User
      */
@@ -134,6 +143,7 @@ class User implements UserInterface
     }
 
     /**
+     * Get the user roles
      * @return array
      */
     public function getRoles()
@@ -142,6 +152,7 @@ class User implements UserInterface
     }
 
     /**
+     * Get the user salt
      * @return null|string
      */
     public function getSalt()
@@ -150,6 +161,7 @@ class User implements UserInterface
     }
 
     /**
+     * Get the user name
      * @return string
      */
     public function getUsername()

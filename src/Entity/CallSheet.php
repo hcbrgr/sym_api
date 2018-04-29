@@ -87,7 +87,7 @@ class CallSheet
     }
 
     /**
-     * Get the present
+     * Get the user present
      * @return bool|null
      */
     public function getPresent(): ?bool
@@ -96,7 +96,7 @@ class CallSheet
     }
 
     /**
-     * Set the present
+     * Set the user present
      * @param bool $present
      * @return CallSheet
      */
@@ -108,7 +108,7 @@ class CallSheet
     }
 
     /**
-     * Get the late
+     * Get the user late
      * @return bool|null
      */
     public function getLate(): ?bool
@@ -117,7 +117,7 @@ class CallSheet
     }
 
     /**
-     * Set the late
+     * Set the user late
      * @param bool $late
      * @return CallSheet
      */

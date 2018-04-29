@@ -24,6 +24,7 @@ class CallSheetRepository extends ServiceEntityRepository
     }
 
     /**
+     * Find the location by user's id and date
      * @param int $user
      * @param string $date
      * @return mixed
@@ -44,6 +45,8 @@ class CallSheetRepository extends ServiceEntityRepository
     }
 
     /**
+     * Find the current event by user's id, beacon location of the current user, date and QRcode
+     *
      * @param string $qrcode
      * @param int $user
      * @param int $beacon
@@ -67,11 +70,13 @@ class CallSheetRepository extends ServiceEntityRepository
     }
 
     /**
+     * Find absence by user id and current date
+     *
      * @param int $userId
      * @param string $date
      * @return mixed
      */
-    public function findByUserAndAbsence(int $userId, string $date, string $limit)
+    public function findAbsenceByUser(int $userId, string $date, string $limit)
     {
         return $this->createQueryBuilder('c')
         ->join('c.event', 'e')
@@ -86,11 +91,13 @@ class CallSheetRepository extends ServiceEntityRepository
     }
 
     /**
+     * Find delay by user id and current date
+     *
      * @param int $userId
      * @param string $date
      * @return mixed
      */
-    public function findByUserAndLate(int $userId, string $date, string $limit)
+    public function findDelayByUser(int $userId, string $date, string $limit)
     {
         return $this->createQueryBuilder('c')
             ->join('c.event', 'e')
@@ -105,11 +112,13 @@ class CallSheetRepository extends ServiceEntityRepository
     }
 
     /**
+     * Find presence by user id and current date
+     *
      * @param int $userId
      * @param string $date
      * @return mixed
      */
-    public function findByUserAndPresent(int $userId, string $date, string $limit)
+    public function findPresenceByUser(int $userId, string $date, string $limit)
     {
         return $this->createQueryBuilder('c')
             ->join('c.event', 'e')

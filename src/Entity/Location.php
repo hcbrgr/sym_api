@@ -32,6 +32,7 @@ class Location
     private $description;
 
     /**
+     * Get the location id
      * @return mixed
      */
     public function getId()
@@ -40,6 +41,7 @@ class Location
     }
 
     /**
+     * Get the beacon of the location
      * @return int|null
      */
     public function getBeacon(): ?int
@@ -48,6 +50,7 @@ class Location
     }
 
     /**
+     * Set the beacon of the location
      * @param $beacon
      * @return Location
      */
@@ -59,6 +62,7 @@ class Location
     }
 
     /**
+     * Get the QRCode of the location
      * @return null|string
      */
     public function getQrcode(): ?string
@@ -67,6 +71,7 @@ class Location
     }
 
     /**
+     * Set the QRCode of the location
      * @param string $qrcode
      * @return Location
      */
@@ -78,6 +83,7 @@ class Location
     }
 
     /**
+     * Get the description of the location
      * @return null|string
      */
     public function getDescription(): ?string
@@ -86,6 +92,7 @@ class Location
     }
 
     /**
+     * Set the description of the location
      * @param string $description
      * @return Location
      */

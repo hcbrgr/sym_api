@@ -53,6 +53,7 @@ class Event
     }
 
     /**
+     * Get the event id
      * @return mixed
      */
     public function getId()
@@ -61,6 +62,7 @@ class Event
     }
 
     /**
+     * Get the event name
      * @return null|string
      */
     public function getName(): ?string
@@ -69,6 +71,7 @@ class Event
     }
 
     /**
+     * Set the event name
      * @param string $name
      * @return Event
      */
@@ -80,6 +83,7 @@ class Event
     }
 
     /**
+     * Get the event location
      * @return Location|null
      */
     public function getLocation(): ?Location
@@ -88,6 +92,7 @@ class Event
     }
 
     /**
+     * Set the location of the event
      * @param Location|null $location
      * @return Event
      */
@@ -99,6 +104,7 @@ class Event
     }
 
     /**
+     * Get the start date of the event
      * @return \DateTimeImmutable|null
      */
     public function getStartDate(): ?\DateTimeImmutable
@@ -107,6 +113,7 @@ class Event
     }
 
     /**
+     * Set the start date of the event
      * @param \DateTimeImmutable $startDate
      * @return Event
      */
@@ -118,6 +125,7 @@ class Event
     }
 
     /**
+     * Get the end date of the event
      * @return \DateTimeImmutable|null
      */
     public function getEndDate(): ?\DateTimeImmutable
@@ -126,6 +134,7 @@ class Event
     }
 
     /**
+     * Set the end date of the event
      * @param \DateTimeImmutable $endDate
      * @return Event
      */
@@ -137,6 +146,7 @@ class Event
     }
 
     /**
+     * Get all the call sheet join to the event
      * @return Collection|CallSheet[]
      */
     public function getCallSheets(): Collection
@@ -145,6 +155,7 @@ class Event
     }
 
     /**
+     * Add a call sheet to the event
      * @param CallSheet $callSheet
      * @return Event
      */
@@ -159,6 +170,7 @@ class Event
     }
 
     /**
+     * Remove a call sheet
      * @param CallSheet $callSheet
      * @return Event
      */

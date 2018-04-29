@@ -81,6 +81,12 @@ class ApiController extends Controller
 
             return $this->json(['error' => 'Aucun token n\'a été envoyé.'], 401);
         }
+        $result = $userRepository->findByToken($content->token);
+        if (is_null($result)) {
+
+            return $this->json(['error' => 'Token not found in database'], 403);
+        }
+
         $test = unserialize(base64_decode($content->token));
         $token = base64_encode(serialize([
             key($test) => time()+20000
@@ -231,9 +237,9 @@ class ApiController extends Controller
         $limit = $date
             ->modify('-1 month')
             ->format('Y-m-d H:i:s');
-        $absence = $callSheetRepository->findByUserAndAbsence($id, $currentDate, $limit);
-        $late = $callSheetRepository->findByUserAndLate($id, $currentDate, $limit);
-        $present = $callSheetRepository->findByUserAndPresent($id, $currentDate, $limit);
+        $absence = $callSheetRepository->findAbsenceByUser($id, $currentDate, $limit);
+        $delay = $callSheetRepository->findDelayByUser($id, $currentDate, $limit);
+        $present = $callSheetRepository->findPresenceByUser($id, $currentDate, $limit);
         if (empty($absence) && empty($late) && empty($present)) {
 
             return $this->json(['error' => 'User not found'],404);
@@ -242,7 +248,7 @@ class ApiController extends Controller
         return $this->json([
             'absences' => count($absence),
             'presents' => count($present),
-            'delays' => count($late)
+            'delays' => count($delay)
         ],200);
     }
 }

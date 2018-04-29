@@ -7,13 +7,22 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 class ApiControllerTest extends WebTestCase
 {
 
+    /**
+     * @var null
+     */
     private $client = null;
 
+    /**
+     *Set the client to the static method createClient
+     */
     public function setUp()
     {
         $this->client = static::createClient();
     }
+
     /**
+     * Test if the login method works by inserting json with the email and password
+     *
      * @test
      */
     public function loginTest()
@@ -25,6 +34,8 @@ class ApiControllerTest extends WebTestCase
     }
 
     /**
+     * Test if the refresh token method works by inserting json with the current token
+     *
      * @test
      */
     public function refreshTokenTest()
@@ -42,6 +53,8 @@ class ApiControllerTest extends WebTestCase
     }
 
     /**
+     * Test if the getLocation method works by send the current token in header
+     *
      * @test
      */
     public function getLocationTest()
@@ -55,6 +68,8 @@ class ApiControllerTest extends WebTestCase
     }
 
     /**
+     * Test if the checkIn method works by inserting json with QRCode data, date, beaconCollectoin and current token
+     *
      * @test
      */
     public function checkInDoneTest()
@@ -81,6 +96,9 @@ class ApiControllerTest extends WebTestCase
     }
 
     /**
+     * Test if the checkIn method doesn't works by inserting the same thing that the previous method test.
+     * This method check if an user can flash a second time the QRCode without to be late
+     *
      * @test
      */
     public function checkInFailTest()
@@ -107,6 +125,8 @@ class ApiControllerTest extends WebTestCase
     }
 
     /**
+     * Test if the report method works and send the goog key
+     *
      * @test
      */
     public function reportTest()
@@ -119,7 +139,7 @@ class ApiControllerTest extends WebTestCase
         $response = $this->client->getResponse();
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertContains('absences', $response->getContent());
-        $this->assertContains('lates', $response->getContent());
-        $this->assertContains('present', $response->getContent());
+        $this->assertContains('delays', $response->getContent());
+        $this->assertContains('presents', $response->getContent());
     }
 }
