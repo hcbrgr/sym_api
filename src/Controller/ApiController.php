@@ -22,7 +22,7 @@ class ApiController extends Controller
     /**
      * Generates a list of all registered locations and allows the user to select one
      *
-     * @param LocationRepository $locationRepository
+     * @param LocationRepository $locationRepository Location's repository
      * @return Response as json
      * @Route("/", name="location", methods="GET")
      */
@@ -35,8 +35,8 @@ class ApiController extends Controller
      * Registers a user using his email and password and returns him a unique token
      *
      * @param Request $request
-     * @param UserRepository $userRepository
-     * @return Response as json
+     * @param UserRepository $userRepository User's repository
+     * @return Response
      * @throws \Doctrine\ORM\NonUniqueResultException
      * @Route("/api/login", name="user_login", methods="POST")
      */
@@ -242,7 +242,7 @@ class ApiController extends Controller
         return $this->json([
             'absences' => count($absence),
             'presents' => count($present),
-            'lates' => count($late)
+            'delays' => count($late)
         ],200);
     }
 }

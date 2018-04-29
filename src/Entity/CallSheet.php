@@ -66,6 +66,7 @@ class CallSheet
     }
 
     /**
+     * Get the event object
      * @return Event|null
      */
     public function getEvent(): ?Event
@@ -74,6 +75,7 @@ class CallSheet
     }
 
     /**
+     * Set the event object
      * @param Event|null $event
      * @return CallSheet
      */
@@ -85,6 +87,7 @@ class CallSheet
     }
 
     /**
+     * Get the present
      * @return bool|null
      */
     public function getPresent(): ?bool
@@ -93,6 +96,7 @@ class CallSheet
     }
 
     /**
+     * Set the present
      * @param bool $present
      * @return CallSheet
      */
@@ -104,6 +108,7 @@ class CallSheet
     }
 
     /**
+     * Get the late
      * @return bool|null
      */
     public function getLate(): ?bool
@@ -112,6 +117,7 @@ class CallSheet
     }
 
     /**
+     * Set the late
      * @param bool $late
      * @return CallSheet
      */

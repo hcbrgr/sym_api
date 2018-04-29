@@ -14,9 +14,6 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
 {
     public function supports(Request $request)
     {
-        if (!$request->headers->has('X-AUTH-TOKEN')) {
-            return new JsonResponse(['error' => 'Access denied'], 401);
-        }
         return $request->headers->has('X-AUTH-TOKEN');
     }
 
