@@ -41,7 +41,7 @@ class ApiController extends Controller
         $result = $userRepository->findByNameAndPass($content->Email, $password);
         if (!$result) {
 
-            return $this->json(['error' => 'Identifiant ou mot de passe incorrect'], 400);
+            return $this->json(['error' => 'Identifiant ou mot de passe incorrect'], 401);
         }
         $token = base64_encode(serialize([
             $result->getId() => time()+20000
@@ -60,7 +60,7 @@ class ApiController extends Controller
         $content = json_decode($request->getContent());
         if (!isset($content->token) || empty($content->token)) {
 
-            return $this->json(['error' => 'Aucun token n\'a été envoyé.'], 422);
+            return $this->json(['error' => 'Aucun token n\'a été envoyé.'], 401);
         }
         $test = unserialize(base64_decode($content->token));
         $token = base64_encode(serialize([
@@ -159,12 +159,16 @@ class ApiController extends Controller
         );
         if (!$result) {
 
-            return $this->json(['Error' => 'Aucun résultat retourné, veuillez attendre le prochain QRCode'], 404);
+            return $this->json(['response' => 'KO'], 404);
         }
         $callSheet = $em
             ->getRepository(CallSheet::class)
             ->find($result->getId());
-        if ($result->getEvent()->getStartDate() <= new \DateTime() && $result->getEvent()->getEndDate() >= new \DateTime()) {
+        $resultDate =  $result->getEvent()->getStartDate();
+        $eventDate = new \DateTime(reset($resultDate ));
+        $sendDate = new \DateTime($content->date);
+        $interval = $sendDate->diff($eventDate);
+        if ($interval->i <= 10) {
             $callSheet->setPresent(1);
         } else {
             $callSheet->setLate(1);
@@ -172,7 +176,7 @@ class ApiController extends Controller
         $em->persist($callSheet);
         $em->flush();
 
-        return $this->json(['Success' => 'Réussi'], 200);
+        return $this->json(['response' => 'OK'], 200);
     }
 
     /**

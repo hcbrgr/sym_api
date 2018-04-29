@@ -52,7 +52,7 @@ class CallSheetRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('c')
             ->join('c.event', 'e')
             ->join('e.location', 'l')
-            ->andWhere('c.user = :user AND c.event = e.id AND e.startDate >= :date AND :date >= e.endDate AND e.location = l.id AND l.qrcode = :qrcode AND l.beacon = :beacon')
+            ->andWhere('c.user = :user AND c.event = e.id AND e.startDate <= :date AND :date <= e.endDate AND e.location = l.id AND l.qrcode = :qrcode AND l.beacon = :beacon')
             ->setParameter('qrcode', $qrcode)
             ->setParameter('beacon', $beacon)
             ->setParameter('date', $date)
