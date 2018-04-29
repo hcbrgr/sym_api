@@ -16,12 +16,12 @@ class UserControllerTest extends WebTestCase
     /**
      * @test
      */
-   /* public function loginTest()
+    /*public function loginTest()
     {
         $this->client->request('POST', '/api/login', [], [], ['CONTENT_TYPE' => 'application/json'], '{"Email":"lala@lala.com", "Password":"password"}');
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
         $this->assertContains('token', $response->getContent());
-    }
+    }*/
 
     /**
      * @test
@@ -37,24 +37,25 @@ class UserControllerTest extends WebTestCase
             '{"token": "YToxOntpOjE7aToxNTI0OTQyMTkwO30="}');
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
         $this->assertContains('token', $response->getContent());
-    }
-
-    /**
-     * @test
-     */
-    /*public function getLocationTest()
-    {
-        $this->client->request('GET', '/api/getLocation', [], [], ['HTTP_X-AUTH-TOKEN' => 'YToxOntpOjE7aToxNTI0OTQ3MzA3O30=']);
-        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
-        $this->assertContains('date', $response->getContent());
-        $this->assertContains('location', $response->getContent());
-
     }*/
 
     /**
      * @test
      */
-    public function checkInTest()
+    public function getLocationTest()
+    {
+        $this->client->request('GET', '/api/getLocation', [], [], ['HTTP_X-AUTH-TOKEN' => 'YToxOntpOjE7aToxNTI1MDI1MTk0O30=']);
+        $response = $this->client->getResponse();
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
+        $this->assertContains('date', $response->getContent());
+        $this->assertContains('location', $response->getContent());
+
+    }
+
+    /**
+     * @test
+     */
+    /*public function checkInTest()
     {
         $this->client->request('POST', "/api/checkIn" ,[], [], [
             'HTTP_X-AUTH-TOKEN' => 'YToxOntpOjE7aToxNTI1MDI1MTk0O30=',
@@ -75,7 +76,7 @@ class UserControllerTest extends WebTestCase
         $response = $this->client->getResponse();
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertContains('OK', $response->getContent());
-    }
+    }*/
 
     /**
      * @test

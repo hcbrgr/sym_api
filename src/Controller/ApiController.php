@@ -13,6 +13,10 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Endroid\QrCode\QrCode;
 
+/**
+ * Class ApiController
+ * @package App\Controller
+ */
 class ApiController extends Controller
 {
     /**
@@ -80,10 +84,14 @@ class ApiController extends Controller
     {
         $token = base64_decode($request->headers->get('X-AUTH-TOKEN'));
         $userId = key(unserialize($token));
-        $nowDate = new \DateTime();
-        $currentDate = $nowDate->format('Y-m-d H:i:s');
+        $currentDate = (new \DateTime())->format('Y-m-d H:i:s');
         $eventObj = $callSheetRepository
             ->findLocationByUser($userId, $currentDate);
+        dump($eventObj);
+        if (empty($eventObj)) {
+
+            return $this->json(['error' => 'Next location not found'], 422);
+        }
         $localisation = reset($eventObj)
             ->getEvent()
             ->getLocation()
@@ -96,6 +104,8 @@ class ApiController extends Controller
     }
 
     /**
+     *
+     *
      * @Route("/getQRCode", name="get_qrcode", methods="GET|POST")
      */
     public function qrCode(): Response

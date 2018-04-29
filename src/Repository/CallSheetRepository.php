@@ -26,13 +26,14 @@ class CallSheetRepository extends ServiceEntityRepository
      */
     public function findLocationByUser(int $user, string $date)
     {
+        dump($date);
         return $this->createQueryBuilder('c')
             ->join('c.event', 'e')
             ->join('e.location', 'l')
-            ->andWhere('c.user = :user AND c.event = e.id AND e.date >= :date AND e.location = l.id')
+            ->andWhere('c.user = :user AND c.event = e.id AND e.startDate >= :date')
             ->setParameter('user', $user)
             ->setParameter('date', $date)
-            ->orderBy('e.date', 'ASC')
+            ->orderBy('e.startDate', 'ASC')
             ->setMaxResults(1)
             ->getQuery()
             ->getResult()
