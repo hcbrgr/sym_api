@@ -17,7 +17,7 @@ class Location
     private $id;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", options={"unsigned"=true})
      */
     private $beacon;
 
@@ -31,16 +31,26 @@ class Location
      */
     private $description;
 
+    /**
+     * @return mixed
+     */
     public function getId()
     {
         return $this->id;
     }
 
+    /**
+     * @return int|null
+     */
     public function getBeacon(): ?int
     {
         return $this->beacon;
     }
 
+    /**
+     * @param $beacon
+     * @return Location
+     */
     public function setBeacon($beacon): self
     {
         $this->beacon= $beacon;
@@ -48,11 +58,18 @@ class Location
         return $this;
     }
 
+    /**
+     * @return null|string
+     */
     public function getQrcode(): ?string
     {
         return $this->qrcode;
     }
 
+    /**
+     * @param string $qrcode
+     * @return Location
+     */
     public function setQrcode(string $qrcode): self
     {
         $this->qrcode = $qrcode;
@@ -60,11 +77,18 @@ class Location
         return $this;
     }
 
+    /**
+     * @return null|string
+     */
     public function getDescription(): ?string
     {
         return $this->description;
     }
 
+    /**
+     * @param string $description
+     * @return Location
+     */
     public function setDescription(string $description): self
     {
         $this->description = $description;

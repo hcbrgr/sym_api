@@ -44,21 +44,34 @@ class Event
      */
     private $callSheets;
 
+    /**
+     * Event constructor.
+     */
     public function __construct()
     {
         $this->callSheets = new ArrayCollection();
     }
 
+    /**
+     * @return mixed
+     */
     public function getId()
     {
         return $this->id;
     }
 
+    /**
+     * @return null|string
+     */
     public function getName(): ?string
     {
         return $this->name;
     }
 
+    /**
+     * @param string $name
+     * @return Event
+     */
     public function setName(string $name): self
     {
         $this->name = $name;
@@ -66,6 +79,9 @@ class Event
         return $this;
     }
 
+    /**
+     * @return Location|null
+     */
     public function getLocation(): ?Location
     {
         return $this->location;
@@ -110,6 +126,10 @@ class Event
         return $this->callSheets;
     }
 
+    /**
+     * @param CallSheet $callSheet
+     * @return Event
+     */
     public function addCallSheet(CallSheet $callSheet): self
     {
         if (!$this->callSheets->contains($callSheet)) {
@@ -120,6 +140,10 @@ class Event
         return $this;
     }
 
+    /**
+     * @param CallSheet $callSheet
+     * @return Event
+     */
     public function removeCallSheet(CallSheet $callSheet): self
     {
         if ($this->callSheets->contains($callSheet)) {

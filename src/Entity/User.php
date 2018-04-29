@@ -25,11 +25,6 @@ class User implements UserInterface
     private $token;
 
     /**
-     * @ORM\Column(type="string", length=40, nullable=true)
-     */
-    private $roles;
-
-    /**
      * @ORM\Column(type="string", length=50)
      */
     private $name;
@@ -111,7 +106,7 @@ class User implements UserInterface
 
     public function getRoles()
     {
-        return array($this->roles);
+        return array('ROLE_USER');
     }
 
     /**

@@ -2,10 +2,6 @@
 
 namespace App\Tests;
 
-use GuzzleHttp\Client;
-use Symfony\Component\HttpKernel\Profiler\Profiler;
-use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
-use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class UserControllerTest extends WebTestCase
@@ -62,7 +58,7 @@ class UserControllerTest extends WebTestCase
     /**
      * @test
      */
-    public function checkInTest()
+    /*public function checkInTest()
     {
         $this->client->request('POST', "/api/checkIn" ,[], [], [
             'HTTP_X-AUTH-TOKEN' => 'YToxOntpOjE7aToxNTI0OTQ4NTM0O30=',
@@ -88,7 +84,7 @@ class UserControllerTest extends WebTestCase
      */
     public function reportTest()
     {
-        $this->client->request('GET', "/api/report/2" ,[], [], [
+        $this->client->request('GET', "/api/report" ,[], [], [
             'HTTP_X-AUTH-TOKEN' => 'YToxOntpOjE7aToxNTI0OTQ4NTM0O30=',
             'CONTENT_TYPE' => 'application/json'
             ]

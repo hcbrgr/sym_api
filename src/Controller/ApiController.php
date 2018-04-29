@@ -166,7 +166,7 @@ class ApiController extends Controller
             ->find($result->getId());
         if ($result->getEvent()->getStartDate() <= new \DateTime() && $result->getEvent()->getEndDate() >= new \DateTime()) {
             $callSheet->setPresent(1);
-        }else{
+        } else {
             $callSheet->setLate(1);
         }
         $em->persist($callSheet);
@@ -180,6 +180,10 @@ class ApiController extends Controller
      */
     public function report(Request $request, CallSheetRepository $callSheetRepository): Response
     {
+        if (!$request->headers->get('X-Auth-Token')) {
+
+            return $this->json(['error' => 'Token required'],422);
+        }
         $id = key(unserialize(base64_decode($request->headers->get('X-Auth-Token'))));
         $date = new \DateTime();
         $currentDate = $date->format('Y-m-d H:i:s');
@@ -196,8 +200,8 @@ class ApiController extends Controller
 
         return $this->json([
             'absences' => count($absence),
-            'présences' => count($present),
-            'retards' => count($late)
+            'presents' => count($present),
+            'lates' => count($late)
         ],200);
     }
 }
