@@ -45,17 +45,17 @@ class ApiController extends Controller
         $content = json_decode($request->getContent());
         if (!isset($content->Password) || empty($content->Password)) {
 
-            return $this->json(['error' => 'Mot de passe requis'], 422);
+            return $this->json(['error' => 'Password required'], 422);
         }
         if (!isset($content->Email) || empty($content->Email)) {
 
-            return $this->json(['error' => 'Email requis'], 422);
+            return $this->json(['error' => 'Email required'], 422);
         }
         $password= hash('sha512', $content->Password);
         $result = $userRepository->findByNameAndPass($content->Email, $password);
         if (!$result) {
 
-            return $this->json(['error' => 'Identifiant ou mot de passe incorrect'], 401);
+            return $this->json(['error' => 'Credentials doesn\'t match'], 401);
         }
         $token = base64_encode(serialize([
             $result->getId() => time()+20000
@@ -79,7 +79,7 @@ class ApiController extends Controller
         $content = json_decode($request->getContent());
         if (!isset($content->token) || empty($content->token)) {
 
-            return $this->json(['error' => 'Aucun token n\'a été envoyé.'], 401);
+            return $this->json(['error' => 'No token send'], 401);
         }
         $result = $userRepository->findByToken($content->token);
         if (is_null($result)) {
@@ -175,19 +175,19 @@ class ApiController extends Controller
         $content = json_decode($request->getContent());
         if (!isset($content->QRCodeData) || empty($content->QRCodeData) || !is_string($content->QRCodeData)) {
 
-            return $this->json(['error' => 'QRCode non fournis'], 422);
+            return $this->json(['error' => 'QRCode required'], 422);
         }
         if (!isset($content->date) || empty($content->date) || !is_string($content->date)) {
 
-            return $this->json(['error' => 'Date non fournis'], 422);
+            return $this->json(['error' => 'Date required'], 422);
         }
         if (!isset($content->beaconCollection) || empty($content->beaconCollection) || !is_array($content->beaconCollection)) {
 
-            return $this->json(['error' => 'Localisation non fournis'], 422);
+            return $this->json(['error' => 'Localisation required'], 422);
         }
         if (!isset($content->Token) || empty($content->Token) || !is_string($content->Token)) {
 
-            return $this->json(['error' => 'Token non fournis'], 422);
+            return $this->json(['error' => 'Token required'], 422);
         }
         $user = key(unserialize(base64_decode($content->Token)));
         $result= $callSheetRepository->findEventNow(
