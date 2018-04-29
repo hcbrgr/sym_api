@@ -44,9 +44,9 @@ class ApiControllerTest extends WebTestCase
         $this->client->request('POST', '/api/refreshToken', [], [],
             [
                 'CONTENT_TYPE' => 'application/json',
-                'HTTP_X-AUTH-TOKEN' => 'YToxOntpOjE7aToxNTI1MDI1MTk0O30='
+                'HTTP_X-AUTH-TOKEN' => 'YToxOntpOjE7aToxNTI1MDUyNDQzO30='
             ],
-            '{"token": "YToxOntpOjE7aToxNTI1MDI1MTk0O30="}');
+            '{"token": "YToxOntpOjE7aToxNTI1MDUyNDQzO30="}');
         $response = $this->client->getResponse();
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertContains('token', $response->getContent());
@@ -59,12 +59,11 @@ class ApiControllerTest extends WebTestCase
      */
     public function getLocationTest()
     {
-        $this->client->request('GET', '/api/getLocation', [], [], ['HTTP_X-AUTH-TOKEN' => 'YToxOntpOjE7aToxNTI1MDI1MTk0O30=']);
+        $this->client->request('GET', '/api/getLocation', [], [], ['HTTP_X-AUTH-TOKEN' => 'YToxOntpOjE7aToxNTI1MDUyNDczO30=']);
         $response = $this->client->getResponse();
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
         $this->assertContains('date', $response->getContent());
         $this->assertContains('location', $response->getContent());
-
     }
 
     /**
@@ -75,7 +74,7 @@ class ApiControllerTest extends WebTestCase
     public function checkInDoneTest()
     {
         $this->client->request('POST', "/api/checkIn" ,[], [], [
-            'HTTP_X-AUTH-TOKEN' => 'YToxOntpOjE7aToxNTI1MDI1MTk0O30=',
+            'HTTP_X-AUTH-TOKEN' => 'YToxOntpOjE7aToxNTI1MDUyNDczO30=',
             'CONTENT_TYPE' => 'application/json'
         ],
             '{
@@ -87,7 +86,7 @@ class ApiControllerTest extends WebTestCase
                             381, 
                             4294902141
                         ],
-	                       "Token": "YToxOntpOjE7aToxNTI1MDI1MTk0O30="
+	                       "Token": "YToxOntpOjE7aToxNTI1MDUyNDczO30="
                     }'
         );
         $response = $this->client->getResponse();
@@ -104,7 +103,7 @@ class ApiControllerTest extends WebTestCase
     public function checkInFailTest()
     {
         $this->client->request('POST', "/api/checkIn" ,[], [], [
-            'HTTP_X-AUTH-TOKEN' => 'YToxOntpOjE7aToxNTI1MDI1MTk0O30=',
+            'HTTP_X-AUTH-TOKEN' => 'YToxOntpOjE7aToxNTI1MDUyNDczO30=',
             'CONTENT_TYPE' => 'application/json'
         ],
             '{
@@ -116,7 +115,7 @@ class ApiControllerTest extends WebTestCase
                             381, 
                             4294902141
                         ],
-	                       "Token": "YToxOntpOjE7aToxNTI1MDI1MTk0O30="
+	                       "Token": "YToxOntpOjE7aToxNTI1MDUyNDczO30="
                     }'
         );
         $response = $this->client->getResponse();
@@ -132,7 +131,7 @@ class ApiControllerTest extends WebTestCase
     public function reportTest()
     {
         $this->client->request('GET', "/api/report", [], [], [
-                'HTTP_X-AUTH-TOKEN' => 'YToxOntpOjE7aToxNTI1MDI1MTk0O30=',
+                'HTTP_X-AUTH-TOKEN' => 'YToxOntpOjE7aToxNTI1MDUyNDczO30=',
                 'CONTENT_TYPE' => 'application/json'
             ]
         );
