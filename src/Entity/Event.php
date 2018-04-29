@@ -87,6 +87,10 @@ class Event
         return $this->location;
     }
 
+    /**
+     * @param Location|null $location
+     * @return Event
+     */
     public function setLocation(?Location $location): self
     {
         $this->location = $location;
@@ -94,11 +98,18 @@ class Event
         return $this;
     }
 
+    /**
+     * @return \DateTimeImmutable|null
+     */
     public function getStartDate(): ?\DateTimeImmutable
     {
         return $this->startDate;
     }
 
+    /**
+     * @param \DateTimeImmutable $startDate
+     * @return Event
+     */
     public function setStartDate(\DateTimeImmutable $startDate): self
     {
         $this->startDate = $startDate;
@@ -106,11 +117,18 @@ class Event
         return $this;
     }
 
+    /**
+     * @return \DateTimeImmutable|null
+     */
     public function getEndDate(): ?\DateTimeImmutable
     {
         return $this->endDate;
     }
 
+    /**
+     * @param \DateTimeImmutable $endDate
+     * @return Event
+     */
     public function setEndDate(\DateTimeImmutable $endDate): self
     {
         $this->endDate = $endDate;

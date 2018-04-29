@@ -14,6 +14,10 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
  */
 class CallSheetRepository extends ServiceEntityRepository
 {
+    /**
+     * CallSheetRepository constructor.
+     * @param RegistryInterface $registry
+     */
     public function __construct(RegistryInterface $registry)
     {
         parent::__construct($registry, CallSheet::class);
@@ -24,15 +28,15 @@ class CallSheetRepository extends ServiceEntityRepository
      * @param string $date
      * @return mixed
      */
-    public function findLocationByUser(int $user, string $date)
+    public function findLocationByUser(int $user, string $date): array
     {
         return $this->createQueryBuilder('c')
             ->join('c.event', 'e')
             ->join('e.location', 'l')
-            ->andWhere('c.user = :user AND c.event = e.id AND e.date >= :date AND e.location = l.id')
+            ->andWhere('c.user = :user AND c.event = e.id AND e.startDate >= :date')
             ->setParameter('user', $user)
             ->setParameter('date', $date)
-            ->orderBy('e.date', 'ASC')
+            ->orderBy('e.startDate', 'ASC')
             ->setMaxResults(1)
             ->getQuery()
             ->getResult()

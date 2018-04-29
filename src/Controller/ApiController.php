@@ -37,6 +37,7 @@ class ApiController extends Controller
      * @param Request $request
      * @param UserRepository $userRepository
      * @return Response as json
+     * @throws \Doctrine\ORM\NonUniqueResultException
      * @Route("/api/login", name="user_login", methods="POST")
      */
     public function login(Request $request, UserRepository $userRepository): Response
@@ -103,17 +104,20 @@ class ApiController extends Controller
     {
         $token = base64_decode($request->headers->get('X-AUTH-TOKEN'));
         $userId = key(unserialize($token));
-        $nowDate = new \DateTime();
-        $currentDate = $nowDate->format('Y-m-d H:i:s');
+        $currentDate = (new \DateTime('now', new \DateTimeZone('Europe/Paris')))->format('Y-m-d H:i:s');
         $eventObj = $callSheetRepository
             ->findLocationByUser($userId, $currentDate);
+        if (empty($eventObj)) {
+
+            return $this->json(['error' => 'Next location not found'], 422);
+        }
         $localisation = reset($eventObj)
             ->getEvent()
             ->getLocation()
             ->getDescription();
         $date = reset($eventObj)
             ->getEvent()
-            ->getDate();
+            ->getStartDate()->format('Y-m-d H:i:s');
 
         return $this->json(['location' => $localisation, "date" => $date ], 200);
     }
@@ -127,7 +131,6 @@ class ApiController extends Controller
      */
     public function qrCode(): Response
     {
-
         $qrLocation = (isset($_POST['location'])) ? $_POST['location'] : $_GET['id'];
         $em = $this
             ->getDoctrine()
@@ -142,7 +145,7 @@ class ApiController extends Controller
         $em->persist($location);
         $em->flush();
         header('Content-Type: '.$qrCode->getContentType());
-        header("Refresh:10 url=getQRCode?id=".$qrLocation);
+        header("Refresh:30 url=getQRCode?id=".$qrLocation);
         $qrCode->writeFile(__DIR__.'/../../public/img/qrcode.png');
 
         return $this->render('location/qrcode.html.twig');
@@ -196,13 +199,12 @@ class ApiController extends Controller
             ->find($result->getId());
         $resultDate =  $result->getEvent()->getStartDate();
         $eventDate = new \DateTime(reset($resultDate ));
-        $sendDate = new \DateTime($content->date);
-        $interval = $sendDate->diff($eventDate);
-        if ($interval->i <= 10) {
-            $callSheet->setPresent(1);
-        } else {
-            $callSheet->setLate(1);
+        $interval = (new \DateTime($content->date))->diff($eventDate);
+        if ($callSheet->getPresent()) {
+
+            return $this->json(['error' => 'You have already flashed the QR code'], 400);
         }
+        ($interval->i <= 10) ? $callSheet->setPresent(1) : $callSheet->setLate(1);
         $em->persist($callSheet);
         $em->flush();
 
@@ -224,7 +226,7 @@ class ApiController extends Controller
             return $this->json(['error' => 'Token required'],422);
         }
         $id = key(unserialize(base64_decode($request->headers->get('X-Auth-Token'))));
-        $date = new \DateTime();
+        $date = new \DateTime('now', new \DateTimeZone('Europe/Paris'));
         $currentDate = $date->format('Y-m-d H:i:s');
         $limit = $date
             ->modify('-1 month')

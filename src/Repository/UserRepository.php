@@ -20,7 +20,10 @@ class UserRepository extends ServiceEntityRepository
     }
 
     /**
-     * @return User[] Returns an array of User objects
+     * @param string $mail
+     * @param string $pass
+     * @return mixed
+     * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function findByNameAndPass(string $mail, string $pass)
     {
@@ -30,19 +33,6 @@ class UserRepository extends ServiceEntityRepository
             ->setParameter('mail', $mail)
             ->setParameter('pass', $pass)
             ->getQuery()
-            ->getOneOrNullResult()
-        ;
+            ->getOneOrNullResult();
     }
-
-    /*
-    public function findOneBySomeField($value): ?User
-    {
-        return $this->createQueryBuilder('u')
-            ->andWhere('u.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }
