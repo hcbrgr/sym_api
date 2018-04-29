@@ -100,7 +100,6 @@ class ApiController extends Controller
      */
     public function qrCode(): Response
     {
-
         $qrLocation = (isset($_POST['location'])) ? $_POST['location'] : $_GET['id'];
         $em = $this
             ->getDoctrine()
@@ -115,7 +114,7 @@ class ApiController extends Controller
         $em->persist($location);
         $em->flush();
         header('Content-Type: '.$qrCode->getContentType());
-        header("Refresh:10 url=getQRCode?l=".$qrLocation);
+        header("Refresh:30 url=getQRCode?id=".$qrLocation);
         $qrCode->writeFile(__DIR__.'/../../public/img/qrcode.png');
 
         return $this->render('location/qrcode.html.twig');
@@ -166,13 +165,8 @@ class ApiController extends Controller
             ->find($result->getId());
         $resultDate =  $result->getEvent()->getStartDate();
         $eventDate = new \DateTime(reset($resultDate ));
-        $sendDate = new \DateTime($content->date);
-        $interval = $sendDate->diff($eventDate);
-        if ($interval->i <= 10) {
-            $callSheet->setPresent(1);
-        } else {
-            $callSheet->setLate(1);
-        }
+        $interval = (new \DateTime($content->date))->diff($eventDate);
+        ($interval->i <= 10) ? $callSheet->setPresent(1) : $callSheet->setLate(1);
         $em->persist($callSheet);
         $em->flush();
 
