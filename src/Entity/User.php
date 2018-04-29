@@ -39,28 +39,36 @@ class User implements UserInterface
      */
     private $password;
 
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\CallSheet", mappedBy="user_id")
-     */
-    private $callSheets;
-
     private $salt;
 
+    /**
+     * User constructor.
+     */
     public function __construct()
     {
         $this->callSheets = new ArrayCollection();
     }
 
+    /**
+     * @return mixed
+     */
     public function getId()
     {
         return $this->id;
     }
 
+    /**
+     * @return null|string
+     */
     public function getToken(): ?string
     {
         return $this->token;
     }
 
+    /**
+     * @param null|string $token
+     * @return User
+     */
     public function setToken(?string $token): self
     {
         $this->token = $token;
@@ -68,11 +76,18 @@ class User implements UserInterface
         return $this;
     }
 
+    /**
+     * @return null|string
+     */
     public function getName(): ?string
     {
         return $this->name;
     }
 
+    /**
+     * @param string $name
+     * @return User
+     */
     public function setName(string $name): self
     {
         $this->name = $name;
@@ -80,11 +95,18 @@ class User implements UserInterface
         return $this;
     }
 
+    /**
+     * @return null|string
+     */
     public function getEmail(): ?string
     {
         return $this->email;
     }
 
+    /**
+     * @param string $email
+     * @return User
+     */
     public function setEmail(string $email): self
     {
         $this->email = $email;
@@ -92,11 +114,18 @@ class User implements UserInterface
         return $this;
     }
 
+    /**
+     * @return null|string
+     */
     public function getPassword(): ?string
     {
         return $this->password;
     }
 
+    /**
+     * @param string $password
+     * @return User
+     */
     public function setPassword(string $password): self
     {
         $this->password = $password;
@@ -104,52 +133,29 @@ class User implements UserInterface
         return $this;
     }
 
+    /**
+     * @return array
+     */
     public function getRoles()
     {
         return array('ROLE_USER');
     }
 
     /**
-     * @return Collection|CallSheet[]
+     * @return null|string
      */
-    /*public function getCallSheets(): Collection
-    {
-        return $this->callSheets;
-    }
-
-    public function addCallSheet(CallSheet $callSheet): self
-    {
-        if (!$this->callSheets->contains($callSheet)) {
-            $this->callSheets[] = $callSheet;
-            $callSheet->setUser($this);
-        }
-
-        return $this;
-    }
-
-    public function removeCallSheet(CallSheet $callSheet): self
-    {
-        if ($this->callSheets->contains($callSheet)) {
-            $this->callSheets->removeElement($callSheet);
-            // set the owning side to null (unless already changed)
-            if ($callSheet->getUser() === $this) {
-                $callSheet->setUser(null);
-            }
-        }
-
-        return $this;
-    }*/
-
     public function getSalt()
     {
         return $this->salt;
     }
 
+    /**
+     * @return string
+     */
     public function getUsername()
     {
-
+        return $this->name;
     }
-
 
     public function eraseCredentials()
     {
