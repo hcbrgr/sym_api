@@ -71,13 +71,19 @@ class CallSheetController extends Controller
      */
     public function report(int $id, CallSheetRepository $callSheetRepository): Response
     {
-        $result = $callSheetRepository->findByUserAndAbsence($id, date('Y-m-d H:i:s'));
-        dump($result);
-        if (!$result) {
+        $date = date('Y-m-d H:i:s');
+        $absence = $callSheetRepository->findByUserAndAbsence($id, $date);
+        $late = $callSheetRepository->findByUserAndLate($id, $date);
+        $present = $callSheetRepository->findByUserAndPresent($id, $date);
+        if (empty($absence) && empty($late) && empty($present)) {
 
-            return $this->json(['error' => 'C\'est cassée'],422);
+            return $this->json(['error' => ''],422);
         }
 
-        return $this->json(['success' => 'bien joué gros con'],200);
+        return $this->json([
+            'absences' => count($absence),
+            'présences' => count($present),
+            'retards' => count($late)
+            ],200);
     }
 }

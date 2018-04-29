@@ -62,16 +62,57 @@ class CallSheetRepository extends ServiceEntityRepository
             ;
     }
 
+    /**
+     * @param int $userId
+     * @param string $date
+     * @return mixed
+     */
     public function findByUserAndAbsence(int $userId, string $date)
     {
         return $this->createQueryBuilder('c')
         ->join('c.event', 'e')
-        ->andWhere('c.user = :user AND c.present = 0 AND e.endDate <= :date')
+        ->andWhere('c.user = :user AND c.present = 0 AND e.endDate <= :date AND c.late = 0')
         ->setParameter('user', $userId)
         ->setParameter('date', $date)
         ->orderBy('e.id', 'ASC')
         ->getQuery()
         ->getResult()
         ;
+    }
+
+    /**
+     * @param int $userId
+     * @param string $date
+     * @return mixed
+     */
+    public function findByUserAndLate(int $userId, string $date)
+    {
+        return $this->createQueryBuilder('c')
+            ->join('c.event', 'e')
+            ->andWhere('c.user = :user AND c.present = 0 AND e.endDate <= :date AND c.late = 1')
+            ->setParameter('user', $userId)
+            ->setParameter('date', $date)
+            ->orderBy('e.id', 'ASC')
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
+    /**
+     * @param int $userId
+     * @param string $date
+     * @return mixed
+     */
+    public function findByUserAndPresent(int $userId, string $date)
+    {
+        return $this->createQueryBuilder('c')
+            ->join('c.event', 'e')
+            ->andWhere('c.user = :user AND c.present = 1 AND e.endDate <= :date AND c.late = 0')
+            ->setParameter('user', $userId)
+            ->setParameter('date', $date)
+            ->orderBy('e.id', 'ASC')
+            ->getQuery()
+            ->getResult()
+            ;
     }
 }
