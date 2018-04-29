@@ -2,10 +2,6 @@
 
 namespace App\Tests;
 
-use GuzzleHttp\Client;
-use Symfony\Component\HttpKernel\Profiler\Profiler;
-use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
-use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class UserControllerTest extends WebTestCase
@@ -24,64 +20,77 @@ class UserControllerTest extends WebTestCase
     {
         $this->client->request('POST', '/api/login', [], [], ['CONTENT_TYPE' => 'application/json'], '{"Email":"lala@lala.com", "Password":"password"}');
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
+        $this->assertContains('token', $response->getContent());
     }
 
     /**
      * @test
      */
-    /*public function refreshToken()
+    /*public function refreshTokenTest()
     {
-        $client = static::createClient();
-        $client->request('POST', '/api/refreshToken', [], [],
+
+        $this->client->request('POST', '/api/refreshToken', [], [],
             [
                 'CONTENT_TYPE' => 'application/json',
                 'HTTP_X-AUTH-TOKEN' => 'YToxOntpOjE7aToxNTI0OTQyMTkwO30='
             ],
             '{"token": "YToxOntpOjE7aToxNTI0OTQyMTkwO30="}');
-        $this->assertEquals(200, $client->getResponse()->getStatusCode());
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
+        $this->assertContains('token', $response->getContent());
     }
 
     /**
      * @test
      */
-    /*public function getLocation()
+    /*public function getLocationTest()
     {
         $this->client->request('GET', '/api/getLocation', [], [], ['HTTP_X-AUTH-TOKEN' => 'YToxOntpOjE7aToxNTI0OTQ3MzA3O30=']);
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
+        $this->assertContains('date', $response->getContent());
+        $this->assertContains('location', $response->getContent());
+
     }*/
 
     /**
      * @test
      */
-    /*public function getQRcode()
+    public function checkInTest()
     {
-        $client = static::createClient();
-        $client->request('POST', '/getQRCode', [], ['location' => 1], [], ['HTTP_X-AUTH-TOKEN' => 'YToxOntpOjE7aToxNTI0OTQ0MDYwO30=']);
-        $this->assertEquals(200, $client->getResponse()->getStatusCode());
-    }*/
-
-    /**
-     * @test
-     */
-    public function checkIn()
-    {
-        $client = static::createClient();
-        $client->request('POST', "/api/checkIn" ,[], [], [
-            'HTTP_X-AUTH-TOKEN' => 'YToxOntpOjE7aToxNTI0OTQ4NTM0O30=',
+        $this->client->request('POST', "/api/checkIn" ,[], [], [
+            'HTTP_X-AUTH-TOKEN' => 'YToxOntpOjE7aToxNTI1MDI1MTk0O30=',
             'CONTENT_TYPE' => 'application/json'
         ],
             '{
-                        "QRCodeData" : "test",
-                        "date": "2018-04-29 00:00:00",
+                        "QRCodeData" : "Description_20180429_092903",
+                        "date": "2018-04-29 10:00:00",
                         "beaconCollection":
                         [
                             65535,
                             381, 
                             4294902141
                         ],
-	                       "Token": "YToxOntpOjE7aToxNTI0OTQ4NTM0O30="
+	                       "Token": "YToxOntpOjE7aToxNTI1MDI1MTk0O30="
                     }'
         );
-        $this->assertEquals(200, $client->getResponse()->getStatusCode());
+        $response = $this->client->getResponse();
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertContains('OK', $response->getContent());
     }
+
+    /**
+     * @test
+     */
+    /*public function reportTest()
+    {
+        $this->client->request('GET', "/api/report", [], [], [
+                'HTTP_X-AUTH-TOKEN' => 'YToxOntpOjE7aToxNTI0OTQ4NTM0O30=',
+                'CONTENT_TYPE' => 'application/json'
+            ]
+        );
+        $response = $this->client->getResponse();
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertContains('absences', $response->getContent());
+        $this->assertContains('lates', $response->getContent());
+        $this->assertContains('present', $response->getContent());
+    }*/
 }

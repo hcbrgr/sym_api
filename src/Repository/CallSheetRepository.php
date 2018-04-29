@@ -52,7 +52,7 @@ class CallSheetRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('c')
             ->join('c.event', 'e')
             ->join('e.location', 'l')
-            ->andWhere('c.user = :user AND c.event = e.id AND e.startDate >= :date AND :date >= e.endDate AND e.location = l.id AND l.qrcode = :qrcode AND l.beacon = :beacon')
+            ->andWhere('c.user = :user AND c.event = e.id AND e.startDate <= :date AND :date <= e.endDate AND e.location = l.id AND l.qrcode = :qrcode AND l.beacon = :beacon')
             ->setParameter('qrcode', $qrcode)
             ->setParameter('beacon', $beacon)
             ->setParameter('date', $date)
@@ -62,16 +62,60 @@ class CallSheetRepository extends ServiceEntityRepository
             ;
     }
 
-    public function findByUserAndAbsence(int $userId, string $date)
+    /**
+     * @param int $userId
+     * @param string $date
+     * @return mixed
+     */
+    public function findByUserAndAbsence(int $userId, string $date, string $limit)
     {
         return $this->createQueryBuilder('c')
         ->join('c.event', 'e')
-        ->andWhere('c.user = :user AND c.present = 0 AND e.endDate <= :date')
+        ->andWhere('c.user = :user AND c.present = 0 AND c.late = 0 AND e.endDate <= :date AND e.startDate >= :limit')
         ->setParameter('user', $userId)
         ->setParameter('date', $date)
+        ->setParameter('limit', $limit)
         ->orderBy('e.id', 'ASC')
         ->getQuery()
         ->getResult()
         ;
+    }
+
+    /**
+     * @param int $userId
+     * @param string $date
+     * @return mixed
+     */
+    public function findByUserAndLate(int $userId, string $date, string $limit)
+    {
+        return $this->createQueryBuilder('c')
+            ->join('c.event', 'e')
+            ->andWhere('c.user = :user AND c.present = 0 AND c.late = 1 AND e.endDate <= :date AND e.startDate >= :limit')
+            ->setParameter('user', $userId)
+            ->setParameter('date', $date)
+            ->setParameter('limit', $limit)
+            ->orderBy('e.id', 'ASC')
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
+    /**
+     * @param int $userId
+     * @param string $date
+     * @return mixed
+     */
+    public function findByUserAndPresent(int $userId, string $date, string $limit)
+    {
+        return $this->createQueryBuilder('c')
+            ->join('c.event', 'e')
+            ->andWhere('c.user = :user AND c.present = 1 AND c.late = 0 AND e.endDate <= :date AND e.startDate >= :limit')
+            ->setParameter('user', $userId)
+            ->setParameter('date', $date)
+            ->setParameter('limit', $limit)
+            ->orderBy('e.id', 'ASC')
+            ->getQuery()
+            ->getResult()
+            ;
     }
 }

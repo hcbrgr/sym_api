@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\CallSheet;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Location;
 use App\Repository\CallSheetRepository;
@@ -24,6 +25,56 @@ class ApiController extends Controller
     public function index(LocationRepository $locationRepository): Response
     {
         return $this->render('location/index.html.twig', ['locations' => $locationRepository->findAll()]);
+    }
+
+    /**
+     * @Route("/api/login", name="user_login", methods="POST")
+     */
+    public function login(Request $request, UserRepository $userRepository): Response
+    {
+        $content = json_decode($request->getContent());
+        if (!isset($content->Password) || empty($content->Password)) {
+
+            return $this->json(['error' => 'Mot de passe requis'], 422);
+        }
+        if (!isset($content->Email) || empty($content->Email)) {
+
+            return $this->json(['error' => 'Email requis'], 422);
+        }
+        $password= hash('sha512', $content->Password);
+        $result = $userRepository->findByNameAndPass($content->Email, $password);
+        if (!$result) {
+
+            return $this->json(['error' => 'Identifiant ou mot de passe incorrect'], 401);
+        }
+        $token = base64_encode(serialize([
+            $result->getId() => time()+20000
+        ]));
+        $result->setToken($token);
+        $this->getDoctrine()->getManager()->flush();
+
+        return $this->json(['token' => $token], 200);
+    }
+
+    /**
+     * @Route("/api/refreshToken", name="refresh_token", methods="POST")
+     */
+    public function refreshToken(Request $request, UserRepository $userRepository): Response
+    {
+        $content = json_decode($request->getContent());
+        if (!isset($content->token) || empty($content->token)) {
+
+            return $this->json(['error' => 'Aucun token n\'a été envoyé.'], 401);
+        }
+        $test = unserialize(base64_decode($content->token));
+        $token = base64_encode(serialize([
+            key($test) => time()+20000
+        ]));
+        $user = $userRepository->find(key($test));
+        $user->setToken($token);
+        $this->getDoctrine()->getManager()->flush();
+
+        return $this->json(['token' => $token ], 200);
     }
 
     /**
@@ -77,52 +128,90 @@ class ApiController extends Controller
     }
 
     /**
-     * @Route("/api/login", name="user_login", methods="POST")
+     * @param Request $request
+     * @param CallSheetRepository $callSheetRepository
+     * @return Response
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @Route("/api/checkIn", name="api_check_in", methods="POST")
      */
-    public function login(Request $request, UserRepository $userRepository): Response
+    public function checkIn(Request $request, CallSheetRepository $callSheetRepository): Response
     {
+        $em = $this
+            ->getDoctrine()
+            ->getManager();
         $content = json_decode($request->getContent());
-        if (!isset($content->Password) || empty($content->Password)) {
+        if (!isset($content->QRCodeData) || empty($content->QRCodeData) || !is_string($content->QRCodeData)) {
 
-            return $this->json(['error' => 'Mot de passe requis'], 422);
+            return $this->json(['error' => 'QRCode non fournis'], 422);
         }
-        if (!isset($content->Email) || empty($content->Email)) {
+        if (!isset($content->date) || empty($content->date) || !is_string($content->date)) {
 
-            return $this->json(['error' => 'Email requis'], 422);
+            return $this->json(['error' => 'Date non fournis'], 422);
         }
-        $password= hash('sha512', $content->Password);
-        $result = $userRepository->findByNameAndPass($content->Email, $password);
+        if (!isset($content->beaconCollection) || empty($content->beaconCollection) || !is_array($content->beaconCollection)) {
+
+            return $this->json(['error' => 'Localisation non fournis'], 422);
+        }
+        if (!isset($content->Token) || empty($content->Token) || !is_string($content->Token)) {
+
+            return $this->json(['error' => 'Token non fournis'], 422);
+        }
+        $user = key(unserialize(base64_decode($content->Token)));
+        $result= $callSheetRepository->findEventNow(
+            $content->QRCodeData,
+            $user,
+            $content->beaconCollection[2],
+            $content->date
+        );
         if (!$result) {
 
-            return $this->json(['error' => 'Identifiant ou mot de passe incorrect'], 400);
+            return $this->json(['response' => 'KO'], 404);
         }
-        $token = base64_encode(serialize([
-            $result->getId() => time()+20000
-        ]));
-        $result->setToken($token);
-        $this->getDoctrine()->getManager()->flush();
+        $callSheet = $em
+            ->getRepository(CallSheet::class)
+            ->find($result->getId());
+        $resultDate =  $result->getEvent()->getStartDate();
+        $eventDate = new \DateTime(reset($resultDate ));
+        $sendDate = new \DateTime($content->date);
+        $interval = $sendDate->diff($eventDate);
+        if ($interval->i <= 10) {
+            $callSheet->setPresent(1);
+        } else {
+            $callSheet->setLate(1);
+        }
+        $em->persist($callSheet);
+        $em->flush();
 
-        return $this->json(['token' => $token], 200);
+        return $this->json(['response' => 'OK'], 200);
     }
 
     /**
-     * @Route("/api/refreshToken", name="refresh_token", methods="POST")
+     * @Route("/api/report", name="api_report", methods="GET")
      */
-    public function refreshToken(Request $request, UserRepository $userRepository): Response
+    public function report(Request $request, CallSheetRepository $callSheetRepository): Response
     {
-        $content = json_decode($request->getContent());
-        if (!isset($content->token) || empty($content->token)) {
+        if (!$request->headers->get('X-Auth-Token')) {
 
-            return $this->json(['error' => 'Aucun token n\'a été envoyé.'], 422);
+            return $this->json(['error' => 'Token required'],422);
         }
-        $test = unserialize(base64_decode($content->token));
-        $token = base64_encode(serialize([
-            key($test) => time()+20000
-        ]));
-        $user = $userRepository->find(key($test));
-        $user->setToken($token);
-        $this->getDoctrine()->getManager()->flush();
+        $id = key(unserialize(base64_decode($request->headers->get('X-Auth-Token'))));
+        $date = new \DateTime();
+        $currentDate = $date->format('Y-m-d H:i:s');
+        $limit = $date
+            ->modify('-1 month')
+            ->format('Y-m-d H:i:s');
+        $absence = $callSheetRepository->findByUserAndAbsence($id, $currentDate, $limit);
+        $late = $callSheetRepository->findByUserAndLate($id, $currentDate, $limit);
+        $present = $callSheetRepository->findByUserAndPresent($id, $currentDate, $limit);
+        if (empty($absence) && empty($late) && empty($present)) {
 
-        return $this->json(['token' => $token ], 200);
+            return $this->json(['error' => 'User not found'],404);
+        }
+
+        return $this->json([
+            'absences' => count($absence),
+            'presents' => count($present),
+            'lates' => count($late)
+        ],200);
     }
 }
