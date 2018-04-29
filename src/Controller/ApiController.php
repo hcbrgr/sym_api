@@ -12,6 +12,10 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Endroid\QrCode\QrCode;
 
+/**
+ * Class ApiController
+ * @package App\Controller
+ */
 class ApiController extends Controller
 {
     /**
@@ -45,6 +49,8 @@ class ApiController extends Controller
     }
 
     /**
+     *
+     *
      * @Route("/getQRCode", name="get_qrcode", methods="GET|POST")
      */
     public function qrCode(): Response
@@ -64,7 +70,7 @@ class ApiController extends Controller
         $em->persist($location);
         $em->flush();
         header('Content-Type: '.$qrCode->getContentType());
-        header("Refresh:10 url=getQRCode?l=".$qrLocation);
+        header("Refresh:10 url=getQRCode?id=".$qrLocation);
         $qrCode->writeFile(__DIR__.'/../../public/img/qrcode.png');
 
         return $this->render('location/qrcode.html.twig');
